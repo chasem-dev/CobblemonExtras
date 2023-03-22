@@ -5,58 +5,58 @@ import com.cobblemon.mod.common.api.pokemon.evolution.Evolution;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.tree.CommandNode;
 import dev.chasem.cobblemonextras.screen.PokeSeeHandlerFactory;
 import dev.chasem.cobblemonextras.screen.PokeTradeHandlerFactory;
-import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.ai.brain.ScheduleBuilder;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
+import static com.mojang.brigadier.arguments.StringArgumentType.word;
+import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
+import static com.mojang.brigadier.builder.RequiredArgumentBuilder.argument;
 
+@Mod.EventBusSubscriber
 public class PokeTrade {
 
-    public PokeTrade() {
-        register();
-    }
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        CommandDispatcher<ServerCommandSource> dispatcher = event.getDispatcher();
 
-    public void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(
-                    literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
-                            .then(literal("accept").executes(this::respond))
-            );
-            dispatcher.register(
-                    literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
-                            .then(literal("deny").executes(this::respond))
-            );
-            dispatcher.register(
-                    literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
-                            .then(literal("cancel").executes(this::respond))
-            );
-            dispatcher.register(
-                    literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
-                            .then(argument("player", EntityArgumentType.player())
-                                    .executes(this::createTrade))
-            );
-        });
+        dispatcher.register(
+                literal("poketrade")
+                        .requires(source -> source.hasPermissionLevel(2))
+                        .then(literal("accept").executes(context -> respond(context.getSource())))
+        );
+        dispatcher.register(
+                literal("poketrade")
+                        .requires(source -> source.hasPermissionLevel(2))
+                        .then(literal("deny").executes(context -> respond(context.getSource())))
+        );
+        dispatcher.register(
+                literal("poketrade")
+                        .requires(source -> source.hasPermissionLevel(2))
+                        .then(literal("cancel").executes(context -> respond(context.getSource())))
+        );
+        dispatcher.register(
+                literal("poketrade")
+                        .requires(source -> source.hasPermissionLevel(2))
+                        .then(argument("player", EntityArgumentType.player())
+                                .executes(context -> createTrade(context.getSource(), EntityArgumentType.getPlayer(context, "player")))));
     }
-
 
     public HashMap<UUID, TradeSession> tradeSessions = new HashMap<>();
 
