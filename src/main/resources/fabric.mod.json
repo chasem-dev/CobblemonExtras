@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "cobblemonextras",
+  "version": "${version}",
+  "name": "CobblemonExtras",
+  "description": "Cobblemon Extras adds special commands for server owners. Including pokesee, compsee, pc and much more.",
+  "authors": [
+    "Xwaffle"
+  ],
+  "contact": {
+    "repo": "https://github.com/DotReyn/Cobblemon-Template"
+  },
+  "license": "MIT",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "dev.chasem.cobblemonextras.CobblemonExtras"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.14.10",
+    "fabric": ">=0.75.1",
+    "minecraft": "1.19.2",
+    "cobblemon": ">=1.2.0+1.19.2"
+  }
+}
