@@ -15,6 +15,9 @@ public class ItemBuilder {
     public ItemBuilder(Item item) {
         this.stack = new ItemStack(item);
     }
+    public ItemBuilder(ItemStack item) {
+        this.stack = item;
+    }
 
     public ItemBuilder addLore(Text[] lore) {
         NbtCompound nbt = this.stack.getOrCreateNbt();

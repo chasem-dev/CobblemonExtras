@@ -39,11 +39,6 @@ public class PokeTradeHandlerFactory implements NamedScreenHandlerFactory {
         return Text.of("Trade: " + tradeSession.trader1.getEntityName() + " - " + tradeSession.trader2.getEntityName());
     }
 
-    @Override
-    public boolean shouldCloseCurrentScreen() {
-        return false;
-    }
-
     int rows() {
         return 6;
     }
@@ -236,8 +231,6 @@ public class PokeTradeHandlerFactory implements NamedScreenHandlerFactory {
                 }
             }
         };
-
-        container.disableSyncing();
 
         return container;
     }

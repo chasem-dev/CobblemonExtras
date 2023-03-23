@@ -3,12 +3,12 @@
   "id": "cobblemonextras",
   "version": "${version}",
   "name": "CobblemonExtras",
-  "description": "Cobblemon Extras adds special commands for server owners. Including pokesee, compsee, pc and much more.",
+  "description": "Cobblemon Extras adds special commands for server owners. Including pokesee, poketrade, pc and much more.",
   "authors": [
     "Xwaffle"
   ],
   "contact": {
-    "repo": "https://github.com/DotReyn/Cobblemon-Template"
+    "repo": "https://github.com/Xwaffle1/CobblemonExtras"
   },
   "license": "MIT",
   "environment": "server",
