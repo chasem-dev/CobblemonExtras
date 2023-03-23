@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.util.LocalizationUtilsKt;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.PlayerManager;
@@ -35,7 +36,7 @@ public class PokeShout {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("pokeshout")
-                            .requires(Permissions.require("cobblemonextras.command.pokeshout", 2))
+                            .requires(Permissions.require("cobblemonextras.command.pokeshout", CobblemonExtrasConfig.COMMAND_POKESHOUT_PERMISSION_LEVEL))
                             .then(argument("slot", IntegerArgumentType.integer(1, 6)).executes(this::execute))
             );
         });

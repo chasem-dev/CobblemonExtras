@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.api.storage.pc.link.PCLink;
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager;
 import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket;
 import com.mojang.brigadier.context.CommandContext;
+import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
@@ -26,8 +27,7 @@ public class PC {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("pc")
-                        .requires(Permissions.require("cobblemonextras.command.pc", 2))
-                        .requires(source -> source.hasPermissionLevel(2))
+                        .requires(Permissions.require("cobblemonextras.command.pc", CobblemonExtrasConfig.COMMAND_PC_PERMISSION_LEVEL))
                         .executes(this::execute)
             );
         });

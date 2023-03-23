@@ -8,6 +8,8 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import dev.chasem.cobblemonextras.CobblemonExtras;
+import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig;
 import dev.chasem.cobblemonextras.screen.PokeSeeHandlerFactory;
 import dev.chasem.cobblemonextras.screen.PokeTradeHandlerFactory;
 import me.lucko.fabric.api.permissions.v0.Permissions;
@@ -35,22 +37,22 @@ public class PokeTrade {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
+                            .requires(Permissions.require("cobblemonextras.command.poketrade", CobblemonExtrasConfig.COMMAND_POKETRADE_PERMISSION_LEVEL))
                             .then(literal("accept").executes(this::respond))
             );
             dispatcher.register(
                     literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
+                            .requires(Permissions.require("cobblemonextras.command.poketrade", CobblemonExtrasConfig.COMMAND_POKETRADE_PERMISSION_LEVEL))
                             .then(literal("deny").executes(this::respond))
             );
             dispatcher.register(
                     literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
+                            .requires(Permissions.require("cobblemonextras.command.poketrade", CobblemonExtrasConfig.COMMAND_POKETRADE_PERMISSION_LEVEL))
                             .then(literal("cancel").executes(this::respond))
             );
             dispatcher.register(
                     literal("poketrade")
-                            .requires(Permissions.require("cobblemonextras.command.poketrade", 2))
+                            .requires(Permissions.require("cobblemonextras.command.poketrade", CobblemonExtrasConfig.COMMAND_POKETRADE_PERMISSION_LEVEL))
                             .then(argument("player", EntityArgumentType.player())
                                     .executes(this::createTrade))
             );

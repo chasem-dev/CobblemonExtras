@@ -1,6 +1,7 @@
 package dev.chasem.cobblemonextras.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig;
 import dev.chasem.cobblemonextras.screen.PokeSeeHandlerFactory;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -21,12 +22,12 @@ public class PokeSee {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("pokesee")
-                    .requires(Permissions.require("cobblemonextras.command.pokesee", 2))
+                    .requires(Permissions.require("cobblemonextras.command.pokesee", CobblemonExtrasConfig.COMMAND_POKESEE_PERMISSION_LEVEL))
                     .executes(this::self)
             );
             dispatcher.register(
                     literal("pokeseeother")
-                            .requires(Permissions.require("cobblemonextras.command.pokeseeother", 2))
+                            .requires(Permissions.require("cobblemonextras.command.pokeseeother", CobblemonExtrasConfig.COMMAND_POKESEEOTHER_PERMISSION_LEVEL))
                             .then(argument("player", EntityArgumentType.player())
                                     .executes(this::other))
             );

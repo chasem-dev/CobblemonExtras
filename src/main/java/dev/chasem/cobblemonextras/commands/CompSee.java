@@ -1,6 +1,7 @@
 package dev.chasem.cobblemonextras.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig;
 import dev.chasem.cobblemonextras.screen.CompSeeHandlerFactory;
 import dev.chasem.cobblemonextras.screen.PokeSeeHandlerFactory;
 import me.lucko.fabric.api.permissions.v0.Permissions;
@@ -22,12 +23,12 @@ public class CompSee {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("compsee")
-                    .requires(Permissions.require("cobblemonextras.command.compsee", 2))
-                    .executes(this::self)
+                            .requires(Permissions.require("cobblemonextras.command.compsee", CobblemonExtrasConfig.COMMAND_COMPSEE_PERMISSION_LEVEL))
+                            .executes(this::self)
             );
             dispatcher.register(
                     literal("compseeother")
-                            .requires(Permissions.require("cobblemonextras.command.compseeother", 2))
+                            .requires(Permissions.require("cobblemonextras.command.compseeother", CobblemonExtrasConfig.COMMAND_COMPSEEOTHER_PERMISSION_LEVEL))
                             .then(argument("player", EntityArgumentType.player())
                                     .executes(this::other))
             );
@@ -41,6 +42,7 @@ public class CompSee {
         }
         return 1;
     }
+
     private int other(CommandContext<ServerCommandSource> ctx) {
         if (ctx.getSource().getPlayer() != null) {
             ServerPlayerEntity player = ctx.getSource().getPlayer();
