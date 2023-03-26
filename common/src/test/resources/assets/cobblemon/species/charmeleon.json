@@ -1,0 +1,22 @@
+{
+  "name": "charmeleon",
+  "nationalPokedexNumber": 5,
+  "primaryType": "fire",
+  "secondaryType": null,
+  "maleRatio": 0.875,
+  "baseStats": {
+    "hp": 58,
+    "attack": 64,
+    "defence": 58,
+    "special_attack": 80,
+    "special_defence": 65,
+    "speed": 80
+  },
+  "catchRate": 45,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.5,
+    "fixed": false
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "charmander",
+  "nationalPokedexNumber": 4,
+  "primaryType": "fire",
+  "secondaryType": null,
+  "maleRatio": 0.875,
+  "baseStats": {
+    "hp": 39,
+    "attack": 52,
+    "defence": 43,
+    "special_attack": 60,
+    "special_defence": 50,
+    "speed": 65
+  },
+  "catchRate": 45,
+  "baseScale": "0.7",
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.15,
+    "fixed": false
+  },
+  "shoulderMountable": true,
+  "shoulderEffect": [
+    {
+      "type": "light_source",
+      "Test": "Baguette"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "ekans",
+  "nationalPokedexNumber": 23,
+  "primaryType": "poison",
+  "secondaryType": null,
+  "maleRatio": 0.5,
+  "baseStats": {
+    "hp": 35,
+    "attack": 60,
+    "defence": 44,
+    "special_attack": 40,
+    "special_defence": 54,
+    "speed": 55
+  },
+  "catchRate": 255,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 1.7,
+    "height": 0.4,
+    "fixed": false
+  }
+}

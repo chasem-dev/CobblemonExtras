@@ -1,0 +1,21 @@
+{
+  "name": "gyarados",
+  "nationalPokedexNumber": 130,
+  "primaryType": "water",
+  "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "baseStats": {
+    "hp": 95,
+    "attack": 125,
+    "defence": 79,
+    "special_attack": 60,
+    "special_defence": 100,
+    "speed": 81
+  },
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.6,
+    "height": 1.1,
+    "fixed": false
+  }
+}

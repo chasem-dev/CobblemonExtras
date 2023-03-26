@@ -1,0 +1,22 @@
+{
+  "name": "diglett",
+  "nationalPokedexNumber": 50,
+  "primaryType": "ground",
+  "secondaryType": null,
+  "maleRatio": 0.5,
+  "baseStats": {
+    "hp": 10,
+    "attack": 55,
+    "defence": 25,
+    "special_attack": 35,
+    "special_defence": 45,
+    "speed": 95
+  },
+  "catchRate": 255,
+  "baseScale": 0.95,
+  "hitbox": {
+    "width": 0.5,
+    "height": 0.7,
+    "fixed": false
+  }
+}

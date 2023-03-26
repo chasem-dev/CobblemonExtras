@@ -1,0 +1,9 @@
+{
+  "name": "tackle",
+  "type": "normal",
+  "damageCategory": "physical",
+  "power": 40.0,
+  "accuracy": 100.0,
+  "effectChance": -1.0,
+  "maxPp": 35
+}

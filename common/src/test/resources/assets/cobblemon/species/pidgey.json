@@ -1,0 +1,22 @@
+{
+  "name": "pidgey",
+  "nationalPokedexNumber": 16,
+  "primaryType": "normal",
+  "secondaryType": "flying",
+  "maleRatio": 0.50,
+  "baseStats": {
+    "hp": 40,
+    "attack": 45,
+    "defence": 40,
+    "special_attack": 35,
+    "special_defence": 35,
+    "speed": 56
+  },
+  "catchRate": 255,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 0.5,
+    "height": 0.8,
+    "fixed": false
+  }
+}

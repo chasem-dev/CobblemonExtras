@@ -1,0 +1,22 @@
+{
+  "name": "venusaur",
+  "nationalPokedexNumber": 3,
+  "primaryType": "grass",
+  "secondaryType": "poison",
+  "maleRatio": 0.875,
+  "baseStats": {
+    "hp": 80,
+    "attack": 82,
+    "defence": 83,
+    "special_attack": 100,
+    "special_defence": 100,
+    "speed": 80
+  },
+  "catchRate": 45,
+  "baseScale": 1.2,
+  "hitbox": {
+    "width": 0.9,
+    "height": 0.8,
+    "fixed": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "bulbasaur",
+  "nationalPokedexNumber": 1,
+  "primaryType": "grass",
+  "secondaryType": "poison",
+  "maleRatio": 0.875,
+  "baseStats": {
+    "hp": 45,
+    "attack": 49,
+    "defence": 49,
+    "special_attack": 65,
+    "special_defence": 65,
+    "speed": 45
+  },
+  "catchRate": 45,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 0.6,
+    "height": 0.8,
+    "fixed": false
+  }
+}

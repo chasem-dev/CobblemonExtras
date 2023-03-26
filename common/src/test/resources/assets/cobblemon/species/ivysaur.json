@@ -1,0 +1,22 @@
+{
+  "name": "ivysaur",
+  "nationalPokedexNumber": 2,
+  "primaryType": "grass",
+  "secondaryType": "poison",
+  "maleRatio": 0.875,
+  "baseStats": {
+    "hp": 60,
+    "attack": 62,
+    "defence": 63,
+    "special_attack": 80,
+    "special_defence": 80,
+    "speed": 60
+  },
+  "catchRate": 45,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.7,
+    "height": 0.8,
+    "fixed": false
+  }
+}

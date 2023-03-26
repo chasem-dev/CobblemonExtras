@@ -1,0 +1,9 @@
+{
+  "name": "aerial_ace",
+  "type": "flying",
+  "damageCategory": "physical",
+  "power": 60,
+  "accuracy": -1,
+  "effectChance": -1,
+  "maxPp": 20
+}

@@ -1,0 +1,21 @@
+{
+  "name": "eevee",
+  "nationalPokedexNumber": 133,
+  "maleRatio": 0.85,
+  "baseStats": {
+    "hp": 55,
+    "attack": 55,
+    "defence": 50,
+    "special_attack": 45,
+    "special_defence": 65,
+    "speed": 55
+  },
+  "catchRate": 45,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.7,
+    "height": 0.8,
+    "fixed": false
+  },
+  "primaryType": "normal"
+}

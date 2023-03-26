@@ -1,0 +1,22 @@
+{
+  "name": "dugtrio",
+  "nationalPokedexNumber": 51,
+  "primaryType": "ground",
+  "secondaryType": null,
+  "maleRatio": 0.5,
+  "baseStats": {
+    "hp": 35,
+    "attack": 100,
+    "defence": 60,
+    "special_attack": 50,
+    "special_defence": 70,
+    "speed": 110
+  },
+  "catchRate": 50,
+  "baseScale": 0.9,
+  "hitbox": {
+    "width": 0.8,
+    "height": 0.9,
+    "fixed": false
+  }
+}

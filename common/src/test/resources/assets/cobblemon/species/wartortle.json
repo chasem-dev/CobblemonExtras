@@ -1,0 +1,22 @@
+{
+  "name": "wartortle",
+  "nationalPokedexNumber": 8,
+  "primaryType": "water",
+  "secondaryType": null,
+  "maleRatio": 0.875,
+  "baseStats": {
+    "hp": 59,
+    "attack": 63,
+    "defence": 80,
+    "special_attack": 865,
+    "special_defence": 80,
+    "speed": 58
+  },
+  "catchRate": 45,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 0.6,
+    "height": 1.3,
+    "fixed": false
+  }
+}

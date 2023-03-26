@@ -1,0 +1,9 @@
+{
+  "name": "aura_sphere",
+  "type": "fighting",
+  "damageCategory": "special",
+  "power": 80,
+  "accuracy": -1,
+  "effectChance": -1,
+  "maxPp": 20
+}
