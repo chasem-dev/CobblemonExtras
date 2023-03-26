@@ -2,6 +2,10 @@
 
 A sidemod for Cobblemon, adding support for additional server side commands.
 
+## Download
+
+Downloads for the mod avaialble on [Modrinth](https://modrinth.com/mod/cobblemonextras)
+
 ## Commands
 
 - /pc - Open your PC from anywhere
