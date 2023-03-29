@@ -37,3 +37,11 @@ https://user-images.githubusercontent.com/2061593/226800374-c42c66a5-bcb4-4094-8
 
 ### PokeSee
 ![image](https://user-images.githubusercontent.com/2061593/226800813-8a89fe07-c91b-4c4d-90d5-e729f6d9e141.png)
+
+### PokeBattle
+https://user-images.githubusercontent.com/2061593/228431838-ba66e2e2-a37e-49ab-ae17-90e4f72fa4d7.mp4
+
+### Battle
+https://user-images.githubusercontent.com/2061593/228431937-f79ab593-4779-4515-830b-6438aaace57b.mp4
+
+
