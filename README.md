@@ -13,7 +13,9 @@ Downloads for the mod avaialble on [Modrinth](https://modrinth.com/mod/cobblemon
 - /pokeseeother - View a summary of someone else's entire party.
 - /pokeshout <slot> - Put a summary of the Pokemon in your designated slot, in chat for others to see.
 - /poketrade <player> - Create a trade window with another player to trade pokemon back and forth.
-
+- /pokebattle <player> <properties> - Force a player into their own wild pokemon battle.
+- /battle <player> - Challenge another player to a PVP pokemon battle.
+  
 #### Permissions  
 By default in vanilla these commands require permission level 2.
 
