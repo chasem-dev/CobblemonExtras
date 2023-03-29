@@ -1,12 +1,8 @@
 package dev.chasem.cobblemonextras
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.permission.CobblemonPermission
-import com.cobblemon.mod.common.api.permission.Permission
-import com.cobblemon.mod.common.api.permission.PermissionLevel
 import com.mojang.brigadier.CommandDispatcher
 import dev.architectury.event.events.common.CommandRegistrationEvent
-import dev.chasem.cobblemonextras.commands.*;
+import dev.chasem.cobblemonextras.commands.*
 import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import net.minecraft.command.CommandRegistryAccess
@@ -34,6 +30,9 @@ object CobblemonExtras {
         PokeSee().register(dispatcher);
         PokeShout().register(dispatcher);
         PokeTrade().register(dispatcher);
+
+        Battle().register(dispatcher);
+        PokeBattle().register(dispatcher);
     }
 
 }

@@ -1,10 +1,11 @@
 package dev.chasem.cobblemonextras.commands;
 
 import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
-import com.cobblemon.mod.common.battles.BattleBuilder;
-import com.cobblemon.mod.common.battles.BattleFormat;
-import com.cobblemon.mod.common.battles.BattleRegistry;
+import com.cobblemon.mod.common.battles.*;
+import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -25,7 +26,7 @@ public class Battle {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
                 literal("battle")
-                        .requires(src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.COMPESEE_OTHER_PERMISSION))
+                        .requires(src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.BATTLE_PERMISSION))
                         .then(argument("player", EntityArgumentType.player())
                                 .executes(this::execute))
         );
@@ -49,21 +50,55 @@ public class Battle {
                 return 1;
             }
 
-            PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(player);
+            if (BattleRegistry.INSTANCE.getBattle(player.getUuid()) != null) {
+                player.sendMessage(Text.literal("You can't start a new battle, while in a battle.").formatted(Formatting.RED));
+                return 1;
+            }
 
-            // Check in on battle requests, if the other player has challenged me, this starts the battle
-            BattleRegistry.BattleChallenge existingChallenge = BattleRegistry.INSTANCE.getPvpChallenges().get(battlePartner.getUuid());
-            if (existingChallenge != null && !existingChallenge.isExpired()) {
-                BattleBuilder.INSTANCE.pvp1v1(player, battlePartner, BattleFormat.Companion.getGEN_9_SINGLES(),
+            if (BattleRegistry.INSTANCE.getBattle(battlePartner.getUuid()) != null) {
+                player.sendMessage(Text.literal("Opponent is currently in a battle.").formatted(Formatting.RED));
+                return 1;
+            }
+
+
+            BattleRegistry.BattleChallenge opponentExistingChallenge = BattleRegistry.INSTANCE.getPvpChallenges().get(battlePartner.getUuid());
+            // Check in on battle requests, if the opponent has challenged me previously, start the battle
+            if (opponentExistingChallenge != null && !opponentExistingChallenge.isExpired() && opponentExistingChallenge.getChallengedPlayerUUID() == player.getUuid()) {
+
+                boolean playerHasAlivePokemon = false;
+                for (Pokemon pokemon : Cobblemon.INSTANCE.getStorage().getParty(player)) {
+                    if (!pokemon.isFainted()) {
+                        playerHasAlivePokemon = true;
+                        break;
+                    }
+                }
+
+                if (!playerHasAlivePokemon) {
+                    battlePartner.sendMessage(Text.literal(player.getEntityName()).formatted(Formatting.YELLOW).append(Text.literal(" has no available Pokemon to battle.").formatted(Formatting.RED)));
+                    player.sendMessage(Text.literal("No available Pokemon to battle.").formatted(Formatting.RED));
+                }
+
+                boolean partnerHasAlivePokemon = false;
+                for (Pokemon pokemon : Cobblemon.INSTANCE.getStorage().getParty(battlePartner)) {
+                    if (!pokemon.isFainted()) {
+                        partnerHasAlivePokemon = true;
+                        break;
+                    }
+                }
+
+                if (!partnerHasAlivePokemon) {
+                    player.sendMessage(Text.literal(battlePartner.getEntityName()).formatted(Formatting.YELLOW).append(Text.literal(" has no available Pokemon to battle.").formatted(Formatting.RED)));
+                    battlePartner.sendMessage(Text.literal("No available Pokemon to battle.").formatted(Formatting.RED));
+                }
+
+                BattleStartResult result = BattleBuilder.INSTANCE.pvp1v1(player, battlePartner, BattleFormat.Companion.getGEN_9_SINGLES(),
                         false, false, (serverPlayerEntity) -> Cobblemon.INSTANCE.getStorage().getParty(serverPlayerEntity));
+
                 BattleRegistry.INSTANCE.getPvpChallenges().remove(battlePartner.getUuid());
+                BattleRegistry.INSTANCE.getPvpChallenges().remove(player.getUuid());
             } else {
-                BattleRegistry.BattleChallenge challenge = new BattleRegistry.BattleChallenge(battlePartner.getUuid(), 30);
+                BattleRegistry.BattleChallenge challenge = new BattleRegistry.BattleChallenge(battlePartner.getUuid(), 60);
                 BattleRegistry.INSTANCE.getPvpChallenges().put(player.getUuid(), challenge);
-
-                // TODO EXPIRE AFTER 30 seconds.
-                // BattleRegistry.pvpChallenges.remove(player.uuid, challenge)
-
                 Text accept = Texts.join(Text.literal("[ACCEPT]")
                         .getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.GREEN)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/battle " + player.getEntityName()))

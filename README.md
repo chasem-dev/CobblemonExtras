@@ -24,6 +24,8 @@ By default in vanilla these commands require permission level 2.
 - cobblemonextras.command.pokeseeother
 - cobblemonextras.command.pokeshout
 - cobblemonextras.command.poketrade
+- cobblemonextras.command.pokebattle
+- cobblemonextras.command.battle
 
 ## Media
 

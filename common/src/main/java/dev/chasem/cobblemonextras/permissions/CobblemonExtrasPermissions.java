@@ -15,6 +15,8 @@ public class CobblemonExtrasPermissions {
     public final CobblemonPermission POKESEE_OTHER_PERMISSION;
     public final CobblemonPermission POKESHOUT_PERMISSION;
     public final CobblemonPermission POKETRADE_PERMISSION;
+    public final CobblemonPermission POKEBATTLE_PERMISSION;
+    public final CobblemonPermission BATTLE_PERMISSION;
 
     public CobblemonExtrasPermissions() {
         this.COMPSEE_PERMISSION = new CobblemonPermission("cobblemonextras.command.compsee", toPermLevel(CobblemonExtrasConfig.COMMAND_COMPSEE_PERMISSION_LEVEL));
@@ -24,6 +26,8 @@ public class CobblemonExtrasPermissions {
         this.POKESEE_OTHER_PERMISSION = new CobblemonPermission("cobblemonextras.command.pokeseeother", toPermLevel(CobblemonExtrasConfig.COMMAND_POKESEEOTHER_PERMISSION_LEVEL));
         this.POKESHOUT_PERMISSION = new CobblemonPermission("cobblemonextras.command.pokeshout", toPermLevel(CobblemonExtrasConfig.COMMAND_POKESHOUT_PERMISSION_LEVEL));
         this.POKETRADE_PERMISSION = new CobblemonPermission("cobblemonextras.command.poketrade", toPermLevel(CobblemonExtrasConfig.COMMAND_POKETRADE_PERMISSION_LEVEL));
+        this.POKEBATTLE_PERMISSION = new CobblemonPermission("cobblemonextras.command.pokebattle", toPermLevel(CobblemonExtrasConfig.COMMAND_POKEBATTLE_PERMISSION_LEVEL));
+        this.BATTLE_PERMISSION = new CobblemonPermission("cobblemonextras.command.battle", toPermLevel(CobblemonExtrasConfig.COMMAND_BATTLE_PERMISSION_LEVEL));
     }
 
     public PermissionLevel toPermLevel(int permLevel) {
