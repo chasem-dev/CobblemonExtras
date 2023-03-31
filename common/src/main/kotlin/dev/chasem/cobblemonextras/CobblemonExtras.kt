@@ -25,14 +25,15 @@ object CobblemonExtras {
         registry: CommandRegistryAccess,
         selection: CommandManager.RegistrationEnvironment
     ) {
-        CompSee().register(dispatcher);
-        PC().register(dispatcher);
-        PokeSee().register(dispatcher);
-        PokeShout().register(dispatcher);
-        PokeTrade().register(dispatcher);
+        CompSee().register(dispatcher)
+        PC().register(dispatcher)
+        PokeSee().register(dispatcher)
+        PokeShout().register(dispatcher)
+        PokeTrade().register(dispatcher)
 
-        Battle().register(dispatcher);
-        PokeBattle().register(dispatcher);
+        Battle().register(dispatcher)
+        PokeBattle().register(dispatcher)
+        PCDelete().register(dispatcher)
     }
 
 }

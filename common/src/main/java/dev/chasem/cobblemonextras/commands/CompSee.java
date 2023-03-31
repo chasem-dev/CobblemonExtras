@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.permission.CobblemonPermission;
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.chasem.cobblemonextras.CobblemonExtras;
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions;
 import dev.chasem.cobblemonextras.screen.CompSeeHandlerFactory;
@@ -18,17 +19,18 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class CompSee {
 
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(
+        LiteralCommandNode<ServerCommandSource> mainSelf = dispatcher.register(
                 literal("compsee")
                         .requires(src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.COMPSEE_PERMISSION))
                         .executes(this::self)
         );
-        dispatcher.register(
+        LiteralCommandNode<ServerCommandSource> mainOther = dispatcher.register(
                 literal("compseeother")
                         .requires(src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.COMPESEE_OTHER_PERMISSION))
-//                        .requires(Permissions.require("cobblemonextras.command.compseeother", CobblemonExtrasConfig.COMMAND_COMPSEEOTHER_PERMISSION_LEVEL))
                         .then(argument("player", EntityArgumentType.player())
                                 .executes(this::other)));
+        dispatcher.register(literal("pcsee").redirect(mainSelf));
+        dispatcher.register(literal("pcseeother").redirect(mainOther));
 
     }
 
