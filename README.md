@@ -29,6 +29,10 @@ By default in vanilla these commands require permission level 2.
 - cobblemonextras.command.pokebattle
 - cobblemonextras.command.battle
 
+**Forge servers using Arclight**
+
+Please be aware, you must replace the permissions noted from `cobblemonextras.command` to `minecraft.command` i.e `minecraft.command.comptake`
+
 ## Media
 
 ### Trading 
