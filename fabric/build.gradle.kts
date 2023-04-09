@@ -40,7 +40,7 @@ dependencies {
         isTransitive = false
     }
 
-    modImplementation ("curse.maven:cobblemon-687131:4443254") {
+    modImplementation ("curse.maven:cobblemon-687131:4468330") {
         isTransitive = false;
     }
 

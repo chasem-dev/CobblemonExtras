@@ -34,6 +34,7 @@ object CobblemonExtras {
         Battle().register(dispatcher)
         PokeBattle().register(dispatcher)
         PCDelete().register(dispatcher)
+        PokeIVs().register(dispatcher)
     }
 
 }

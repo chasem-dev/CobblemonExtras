@@ -29,9 +29,6 @@ public class CompSee {
                         .requires(src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.COMPESEE_OTHER_PERMISSION))
                         .then(argument("player", EntityArgumentType.player())
                                 .executes(this::other)));
-        dispatcher.register(literal("pcsee").redirect(mainSelf));
-        dispatcher.register(literal("pcseeother").redirect(mainOther));
-
     }
 
     private int self(CommandContext<ServerCommandSource> ctx) {

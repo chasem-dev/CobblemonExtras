@@ -45,7 +45,7 @@ dependencies {
     }
     testImplementation(project(":common", configuration = "namedElements"))
 
-    modImplementation ("curse.maven:cobblemon-687131:4443261") {
+    modImplementation ("curse.maven:cobblemon-687131:4468321") {
         exclude(group = "net.minecraftforge")
     }
 

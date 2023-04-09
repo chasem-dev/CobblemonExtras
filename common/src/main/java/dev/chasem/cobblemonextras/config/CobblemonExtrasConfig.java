@@ -28,6 +28,8 @@ public class CobblemonExtrasConfig {
     public static int COMMAND_BATTLE_PERMISSION_LEVEL = 2;
     public static int COMMAND_COMPTAKE_PERMISSION_LEVEL = 2;
 
+    public static int COMMAND_POKEIVS_PERMISSION_LEVEL = 2;
+
     public CobblemonExtrasConfig() {
         init();
     }
@@ -59,6 +61,7 @@ public class CobblemonExtrasConfig {
             COMMAND_BATTLE_PERMISSION_LEVEL = permissionMap.getOrDefault("command.battle", 2);
             COMMAND_POKEBATTLE_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokebattle", 2);
             COMMAND_COMPTAKE_PERMISSION_LEVEL = permissionMap.getOrDefault("command.comptake", 2);
+            COMMAND_POKEIVS_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokeivs", 2);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -92,6 +95,8 @@ public class CobblemonExtrasConfig {
                         .name("command.pokebattle")
                         .value(2)
                         .name("command.comptake")
+                        .value(2)
+                        .name("command.pokeivs")
                         .value(2)
                     .endObject()
                 .endObject()

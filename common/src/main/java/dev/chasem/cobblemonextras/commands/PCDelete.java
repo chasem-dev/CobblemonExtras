@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPokemonPa
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.chasem.cobblemonextras.CobblemonExtras;
@@ -27,13 +28,12 @@ public class PCDelete {
 
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralCommandNode<ServerCommandSource> main = dispatcher.register(
-                literal("pctake")
+                literal("comptake")
                         .requires(src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.COMPTAKE_PERMISSION))
                         .then(argument("player", EntityArgumentType.player())
                                 .then(argument("box", IntegerArgumentType.integer(1, Cobblemon.config.getDefaultBoxCount()))
                                         .then(argument("slot", IntegerArgumentType.integer(1, 30))
                                                 .executes(this::other)))));
-        dispatcher.register(literal("comptake").redirect(main));
     }
 
     private int other(CommandContext<ServerCommandSource> ctx) {
