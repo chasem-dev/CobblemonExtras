@@ -1,30 +1,21 @@
 package dev.chasem.cobblemonextras.commands;
 
-import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor;
-import com.cobblemon.mod.common.api.pokemon.stats.Stat;
 import com.cobblemon.mod.common.api.pokemon.stats.Stats;
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon;
 import com.cobblemon.mod.common.battles.BattleRegistry;
 import com.cobblemon.mod.common.battles.BattleSide;
-import com.cobblemon.mod.common.command.argument.PartySlotArgumentType;
-import com.cobblemon.mod.common.pokemon.IVs;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.chasem.cobblemonextras.CobblemonExtras;
-import dev.chasem.cobblemonextras.commands.argument.StatArgumentType;
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions;
-import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static net.minecraft.server.command.CommandManager.literal;
