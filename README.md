@@ -50,4 +50,8 @@ https://user-images.githubusercontent.com/2061593/228431838-ba66e2e2-a37e-49ab-a
 ### Battle
 https://user-images.githubusercontent.com/2061593/228431937-f79ab593-4779-4515-830b-6438aaace57b.mp4
 
+### PokeIVs
+https://user-images.githubusercontent.com/2061593/230789072-a5fdfbed-2985-4a1b-ba86-230870f38523.mp4
+
+
 
