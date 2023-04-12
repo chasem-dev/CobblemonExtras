@@ -50,7 +50,7 @@ public class PokeBattle {
             return 1;
         }
 
-        if (BattleRegistry.INSTANCE.getBattle(battlingPlayer.getUuid()) != null) {
+        if (BattleRegistry.INSTANCE.getBattleByParticipatingPlayer(battlingPlayer) != null) {
             ctx.getSource().sendMessage(Text.literal("Player is in an active battle.").formatted(Formatting.RED));
             return 1;
         }
