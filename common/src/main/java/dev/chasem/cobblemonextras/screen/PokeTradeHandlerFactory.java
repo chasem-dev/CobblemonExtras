@@ -208,7 +208,7 @@ public class PokeTradeHandlerFactory implements NamedScreenHandlerFactory {
             }
 
             @Override
-            public ItemStack transferSlot(PlayerEntity player, int index) {
+            public ItemStack quickMove(PlayerEntity player, int index) {
                 return null;
             }
 
@@ -223,13 +223,15 @@ public class PokeTradeHandlerFactory implements NamedScreenHandlerFactory {
             }
 
             @Override
-            public void close(PlayerEntity player) {
+            public void onClosed(PlayerEntity player) {
                 if (!tradeSession.cancelled) {
                     tradeSession.cancel();
                     tradeSession.trader1.closeHandledScreen();
                     tradeSession.trader2.closeHandledScreen();
                 }
             }
+
+
         };
 
         return container;

@@ -5,7 +5,7 @@
   "name": "CobblemonExtras",
   "description": "Adds Pokémon to the world, letting you find, battle, capture, and evolve them.",
   "authors": [
-    "The Cobblemon Team"
+    "The Cobblemon Extas Team"
   ],
   "contact": {
     "homepage": "https://cobblemon.com/",
@@ -21,10 +21,10 @@
   },
   "mixins": [],
   "depends": {
-    "fabricloader": ">=0.13.3",
-    "fabric": ">=0.75.1",
-    "architectury": ">=6.5.69",
-    "minecraft": ">=1.19.2",
+    "fabricloader": ">=0.14.21",
+    "fabric": ">=0.89.0",
+    "fabric-api": "*",
+    "minecraft": ">=1.20.0",
     "java": ">=17"
   },
   "custom": {

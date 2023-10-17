@@ -73,7 +73,7 @@ public class PokeSeeHandlerFactory implements NamedScreenHandlerFactory {
             }
 
             @Override
-            public ItemStack transferSlot(PlayerEntity player, int index) {
+            public ItemStack quickMove(PlayerEntity player, int index) {
                 return null;
             }
 

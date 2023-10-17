@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.reflect)
 
     modImplementation(libs.fabricLoader)
-    modApi ("curse.maven:cobblemon-687131:4468330")
+    modApi ("curse.maven:cobblemon-687131:4797468")
     modApi(libs.architectury)
 
     //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'

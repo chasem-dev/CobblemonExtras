@@ -110,7 +110,7 @@ public class CompSeeHandlerFactory implements NamedScreenHandlerFactory {
             }
 
             @Override
-            public ItemStack transferSlot(PlayerEntity player, int index) {
+            public ItemStack quickMove(PlayerEntity player, int slot) {
                 return null;
             }
 

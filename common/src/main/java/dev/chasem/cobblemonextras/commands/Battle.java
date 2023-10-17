@@ -17,6 +17,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
+import java.util.UUID;
+
 import static com.cobblemon.mod.common.util.LocalizationUtilsKt.lang;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -65,39 +67,56 @@ public class Battle {
             // Check in on battle requests, if the opponent has challenged me previously, start the battle
             if (opponentExistingChallenge != null && !opponentExistingChallenge.isExpired() && opponentExistingChallenge.getChallengedPlayerUUID() == player.getUuid()) {
 
-                boolean playerHasAlivePokemon = false;
+                Pokemon playerLeadingPokemon = null;
                 for (Pokemon pokemon : Cobblemon.INSTANCE.getStorage().getParty(player)) {
                     if (!pokemon.isFainted()) {
-                        playerHasAlivePokemon = true;
+                        playerLeadingPokemon = pokemon;
                         break;
                     }
                 }
 
-                if (!playerHasAlivePokemon) {
+                if (playerLeadingPokemon == null) {
                     battlePartner.sendMessage(Text.literal(player.getEntityName()).formatted(Formatting.YELLOW).append(Text.literal(" has no available Pokemon to battle.").formatted(Formatting.RED)));
                     player.sendMessage(Text.literal("No available Pokemon to battle.").formatted(Formatting.RED));
+                    BattleRegistry.INSTANCE.removeChallenge(player.getUuid(), battlePartner.getUuid());
+                    return 1;
                 }
 
-                boolean partnerHasAlivePokemon = false;
+                Pokemon partnerLeadingPokemon = null;
                 for (Pokemon pokemon : Cobblemon.INSTANCE.getStorage().getParty(battlePartner)) {
                     if (!pokemon.isFainted()) {
-                        partnerHasAlivePokemon = true;
+                        partnerLeadingPokemon = pokemon;
                         break;
                     }
                 }
 
-                if (!partnerHasAlivePokemon) {
+                if (partnerLeadingPokemon == null) {
                     player.sendMessage(Text.literal(battlePartner.getEntityName()).formatted(Formatting.YELLOW).append(Text.literal(" has no available Pokemon to battle.").formatted(Formatting.RED)));
                     battlePartner.sendMessage(Text.literal("No available Pokemon to battle.").formatted(Formatting.RED));
+                    BattleRegistry.INSTANCE.removeChallenge(player.getUuid(), battlePartner.getUuid());
+                    return 1;
                 }
 
-                BattleStartResult result = BattleBuilder.INSTANCE.pvp1v1(player, battlePartner, BattleFormat.Companion.getGEN_9_SINGLES(),
-                        false, false, (serverPlayerEntity) -> Cobblemon.INSTANCE.getStorage().getParty(serverPlayerEntity));
-
+                BattleStartResult result = BattleBuilder.INSTANCE.pvp1v1(player, battlePartner, playerLeadingPokemon.getUuid(), partnerLeadingPokemon.getUuid());
+                BattleRegistry.INSTANCE.removeChallenge(player.getUuid(), battlePartner.getUuid());
                 BattleRegistry.INSTANCE.getPvpChallenges().remove(battlePartner.getUuid());
                 BattleRegistry.INSTANCE.getPvpChallenges().remove(player.getUuid());
             } else {
-                BattleRegistry.BattleChallenge challenge = new BattleRegistry.BattleChallenge(battlePartner.getUuid(), 60);
+
+                Pokemon playerLeadingPokemon = null;
+                for (Pokemon pokemon : Cobblemon.INSTANCE.getStorage().getParty(player)) {
+                    if (!pokemon.isFainted()) {
+                        playerLeadingPokemon = pokemon;
+                        break;
+                    }
+                }
+
+                if (playerLeadingPokemon == null) {
+                    player.sendMessage(Text.literal("You have no available Pokemon to battle.").formatted(Formatting.RED));
+                    return 1;
+                }
+
+                BattleRegistry.BattleChallenge challenge = new BattleRegistry.BattleChallenge(UUID.randomUUID(), battlePartner.getUuid(), playerLeadingPokemon.getUuid(), 60);
                 BattleRegistry.INSTANCE.getPvpChallenges().put(player.getUuid(), challenge);
                 Text accept = Texts.join(Text.literal("[ACCEPT]")
                         .getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.GREEN)
