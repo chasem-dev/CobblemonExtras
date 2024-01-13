@@ -22,9 +22,6 @@ versions:
   forge: 1.20.1-47.0.50
   kotlinForForge: 4.3.0
 
-  # common
-  architectury: 6.5.69
-
   # test
   junit: 5.9.0
   mockito: 3.3.3
@@ -79,12 +76,6 @@ dependencies:
     name: fabric-loader
     version: { ref: fabric-loader }
 
-  # common module
-  architectury:
-    group: dev.architectury
-    name: architectury
-    version: { ref: architectury }
-
   # fabric
   fabricApi:
     group: net.fabricmc.fabric-api
@@ -94,10 +85,6 @@ dependencies:
     group: net.fabricmc
     name: fabric-language-kotlin
     version: { ref: fabric-kotlin }
-  architecturyFabric:
-    group: dev.architectury
-    name: architectury-fabric
-    version: { ref: architectury }
   fabricPermissionsApi:
     group: me.lucko
     name: fabric-permissions-api
@@ -112,10 +99,6 @@ dependencies:
     group: net.minecraftforge
     name: forge
     version: { ref: forge }
-  architecturyForge:
-    group: dev.architectury
-    name: architectury-forge
-    version: { ref: architectury }
   kotlinForForge:
     group: thedarkcolour
     name: kotlinforforge

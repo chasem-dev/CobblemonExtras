@@ -29,6 +29,7 @@ public class CobblemonExtrasConfig {
     public static int COMMAND_COMPTAKE_PERMISSION_LEVEL = 2;
 
     public static int COMMAND_POKEIVS_PERMISSION_LEVEL = 2;
+    public static boolean SHOWCASE_ENABLED = true;
 
     public CobblemonExtrasConfig() {
         init();

@@ -47,7 +47,6 @@ dependencies {
     modApi(libs.fabricLoader)
     modApi(libs.fabricApi)
     modApi(libs.fabricKotlin)
-    modApi(libs.architecturyFabric)
     modApi(libs.fabricPermissionsApi)
     listOf(
         libs.stdlib,

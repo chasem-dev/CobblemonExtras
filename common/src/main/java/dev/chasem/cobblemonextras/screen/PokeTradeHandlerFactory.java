@@ -105,8 +105,9 @@ public class PokeTradeHandlerFactory implements NamedScreenHandlerFactory {
             @Override
             public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
                 if (tradeSession.cancelled) {
-                    player.sendMessage(Text.literal("Trade has been cancelled.").formatted(Formatting.RED));
-                    player.closeHandledScreen();
+                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+                    serverPlayer.sendMessage(Text.literal("Trade has been cancelled.").formatted(Formatting.RED));
+                    serverPlayer.closeHandledScreen();
                 }
                 double row = Math.floor((double) slotIndex / 9.0D);
                 int index = slotIndex % 9;

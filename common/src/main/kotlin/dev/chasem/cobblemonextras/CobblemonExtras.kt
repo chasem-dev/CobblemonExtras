@@ -1,7 +1,6 @@
 package dev.chasem.cobblemonextras
 
 import com.mojang.brigadier.CommandDispatcher
-import dev.architectury.event.events.common.CommandRegistrationEvent
 import dev.chasem.cobblemonextras.commands.*
 import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
@@ -17,7 +16,6 @@ object CobblemonExtras {
         CobblemonExtrasConfig() // must load before permissions so perms use default permission level.
         this.permissions = CobblemonExtrasPermissions()
 
-        CommandRegistrationEvent.EVENT.register(CobblemonExtras::registerCommands)
     }
 
     fun registerCommands(
@@ -25,6 +23,7 @@ object CobblemonExtras {
         registry: CommandRegistryAccess,
         selection: CommandManager.RegistrationEnvironment
     ) {
+        println("CobblemonExtras Commands Registered")
         CompSee().register(dispatcher)
         PC().register(dispatcher)
         PokeSee().register(dispatcher)
