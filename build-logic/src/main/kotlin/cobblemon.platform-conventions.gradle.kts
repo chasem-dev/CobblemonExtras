@@ -20,6 +20,11 @@ tasks {
         archiveBaseName.set("CobblemonExtras-${project.name}")
         configurations = listOf(bundle)
         mergeServiceFiles()
+        // include org.apache.httpcomponents:httpclient 4.4.1 in jar
+//        dependencies {
+//            include("org.apache.httpcomponents:httpclient:4.4.1")
+//        }
+
     }
 
     remapJar {

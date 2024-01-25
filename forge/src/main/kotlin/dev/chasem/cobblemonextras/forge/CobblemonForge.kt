@@ -1,6 +1,7 @@
 package dev.chasem.cobblemonextras.forge
 
 import dev.chasem.cobblemonextras.CobblemonExtras
+import dev.chasem.cobblemonextras.forge.event.ForgeEventHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.fml.common.Mod
@@ -9,6 +10,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 
 @Mod(CobblemonExtras.MODID)
 class CobblemonExtrasForge {
+    private val forgeEventHandler = ForgeEventHandler()
     init {
         with(thedarkcolour.kotlinforforge.forge.MOD_BUS) {
 //            EventBuses.registerModEventBus(CobblemonExtras.MODID, this)
@@ -18,6 +20,7 @@ class CobblemonExtrasForge {
         with(MinecraftForge.EVENT_BUS) {
             addListener(this@CobblemonExtrasForge::registerCommands)
         }
+        forgeEventHandler.register()
     }
 
     private fun registerCommands(e: RegisterCommandsEvent) {

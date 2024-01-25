@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.storage.NoPokemonStoreException;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.storage.pc.PCBox;
 import com.cobblemon.mod.common.api.storage.pc.PCStore;
+import com.cobblemon.mod.common.config.CobblemonConfig;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import dev.chasem.cobblemonextras.util.ItemBuilder;
 import dev.chasem.cobblemonextras.util.PokemonUtility;
@@ -101,7 +102,7 @@ public class CompSeeHandlerFactory implements NamedScreenHandlerFactory {
         return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X5, syncId, inv, inventory, rows()) {
             @Override
             public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-                if (slotIndex == 44 && boxNumber < 29) {
+                if (slotIndex == 44 && boxNumber < Cobblemon.config.getDefaultBoxCount() - 1) {
                     player.openHandledScreen(new CompSeeHandlerFactory(toView, boxNumber + 1));
                 }
                 if (slotIndex == 42 && boxNumber > 0) {

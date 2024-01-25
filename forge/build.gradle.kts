@@ -54,8 +54,12 @@ dependencies {
         libs.stdlib,
         libs.serializationCore,
         libs.serializationJson,
-        libs.reflect
-    ).forEach(::forgeRuntimeLibrary)
+        libs.reflect,
+        libs.httpclient
+    ).forEach {
+        bundle(it)
+        forgeRuntimeLibrary(it)
+    }
 }
 
 tasks {

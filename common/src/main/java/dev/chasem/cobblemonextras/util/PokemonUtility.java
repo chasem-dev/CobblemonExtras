@@ -62,7 +62,7 @@ public class PokemonUtility {
 
         MutableText ivsText = Text.literal(" [IVs]").formatted(Formatting.LIGHT_PURPLE);
         MutableText ivsHoverText = Text.literal("");
-        List<Text> ivsHoverTextList = Text.literal("IVs").formatted(Formatting.GOLD).getWithStyle(Style.EMPTY.withUnderline(Boolean.TRUE));
+        List<Text> ivsHoverTextList = Text.literal("IVs").formatted(Formatting.LIGHT_PURPLE).getWithStyle(Style.EMPTY.withUnderline(Boolean.TRUE));
         ivsHoverTextList.add(Text.literal("\n"));
         ivsHoverTextList.add(Text.literal("HP: ").formatted(Formatting.RED).append(Text.literal(String.valueOf(pokemon.getIvs().getOrDefault(Stats.HP))).formatted(Formatting.WHITE)));
         ivsHoverTextList.add(Text.literal("\n"));

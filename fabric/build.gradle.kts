@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
+
     "developmentFabric"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
@@ -54,6 +55,7 @@ dependencies {
         libs.jetbrainsAnnotations,
         libs.serializationCore,
         libs.serializationJson,
+        libs.httpclient
     ).forEach {
         bundle(it)
         runtimeOnly(it)
