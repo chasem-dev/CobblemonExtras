@@ -99,6 +99,7 @@ object CobblemonExtras {
         PokeShoutAll().register(dispatcher)
         Showcase().register(dispatcher)
         ItemShout().register(dispatcher)
+        PokeOdds().register(dispatcher)
     }
 
 }

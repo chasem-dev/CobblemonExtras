@@ -28,10 +28,14 @@ public class CobblemonExtrasConfig {
         @SerializedName("command.pokeivs") public int COMMAND_POKEIVS_PERMISSION_LEVEL = 2;
         @SerializedName("command.emptybox") public int COMMAND_EMPTYBOX_PERMISSION_LEVEL = 2;
         @SerializedName("command.pokeshoutall") public int COMMAND_POKESHOUT_ALL_PERMISSION_LEVEL = 2;
+        @SerializedName("command.pokeodds") public int COMMAND_POKEODDS_PERMISSION_LEVEL = 2;
     }
 
     public class ShowcaseConfig {
         public boolean isShowcaseEnabled = true;
         public String apiSecret = "To start using showcase, please goto https://cobblemonextras.com/showcase";
+
+        public int syncIntervalMinutes = 5;
+        public boolean debug = false;
     }
 }

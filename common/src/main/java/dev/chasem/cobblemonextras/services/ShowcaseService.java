@@ -50,12 +50,13 @@ public class ShowcaseService {
                 CobblemonExtras.INSTANCE.getLogger().info("Failed to enable Showcase");
                 CobblemonExtras.INSTANCE.getLogger().error("Invalid API Secret, please goto https://cobblemonextras.com/showcase to get your API Secret");
             } else {
+
+                CobblemonExtras.INSTANCE.getLogger().info("[CobblemonExtras] Showcase will sync every " + CobblemonExtras.config.showcase.syncIntervalMinutes + " minutes.");
                 // async task to sync players every 5 minutes
                 showcaseThread = new Thread(() -> {
                     while (showcaseThread == Thread.currentThread()) {
                         try {
-//                            Thread.sleep(1000 * 60 * 5);
-                            Thread.sleep(1000 * 30);
+                            Thread.sleep(1000L * 60 * CobblemonExtras.config.showcase.syncIntervalMinutes);
                             // Get Minecraft Server instance
                             MinecraftServer server = Cobblemon.INSTANCE.getImplementation().server();
                             // Sync all players
@@ -101,18 +102,22 @@ public class ShowcaseService {
             JsonElement moveSet3 = moveJson.get("MoveSet3");
             if (moveSet0 != null && !moveSet0.isJsonNull()) {
                 moveSet0.getAsJsonObject().addProperty("MoveName", pokemon.getMoveSet().get(0).getDisplayName().getString());
+                moveSet0.getAsJsonObject().addProperty("MoveType", pokemon.getMoveSet().get(0).getType().getName());
                 moveJson.add("MoveSet0", moveSet0);
             }
             if (moveSet1 != null && !moveSet1.isJsonNull()) {
                 moveSet1.getAsJsonObject().addProperty("MoveName", pokemon.getMoveSet().get(1).getDisplayName().getString());
+                moveSet1.getAsJsonObject().addProperty("MoveType", pokemon.getMoveSet().get(1).getType().getName());
                 moveJson.add("MoveSet1", moveSet1);
             }
             if (moveSet2 != null && !moveSet2.isJsonNull()) {
                 moveSet2.getAsJsonObject().addProperty("MoveName", pokemon.getMoveSet().get(2).getDisplayName().getString());
+                moveSet2.getAsJsonObject().addProperty("MoveType", pokemon.getMoveSet().get(2).getType().getName());
                 moveJson.add("MoveSet2", moveSet2);
             }
             if (moveSet3 != null && !moveSet3.isJsonNull()) {
                 moveSet3.getAsJsonObject().addProperty("MoveName", pokemon.getMoveSet().get(3).getDisplayName().getString());
+                moveSet3.getAsJsonObject().addProperty("MoveType", pokemon.getMoveSet().get(3).getType().getName());
                 moveJson.add("MoveSet3", moveSet3);
             }
             pokemonJson.add("MoveSet", moveJson);
@@ -180,7 +185,9 @@ public class ShowcaseService {
                 CobblemonExtras.INSTANCE.getLogger().error("Invalid API Secret, please goto https://cobblemonextras.com/showcase to get your API Secret");
                 return;
             }
-            CobblemonExtras.INSTANCE.getLogger().info("Syncing " + player.length + " players...");
+            if (CobblemonExtras.config.showcase.debug) {
+                CobblemonExtras.INSTANCE.getLogger().info("Syncing " + player.length + " players...");
+            }
             // Build JSonArray of player data
 
             JsonObject request = new JsonObject();

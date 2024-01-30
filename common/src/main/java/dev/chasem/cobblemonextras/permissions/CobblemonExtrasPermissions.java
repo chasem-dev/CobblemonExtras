@@ -22,6 +22,7 @@ public class CobblemonExtrasPermissions {
     public final CobblemonPermission EMPTYBOX_PERMISSION;
     public final CobblemonPermission POKESHOUT_ALL_PERMISSION;
     public final CobblemonPermission ITEMSHOUT_PERMISSION;
+    public final CobblemonPermission POKEODDS_PERMISSION;
 
     public CobblemonExtrasPermissions() {
         this.COMPSEE_PERMISSION = new CobblemonPermission("cobblemonextras.command.compsee", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_COMPSEE_PERMISSION_LEVEL));
@@ -38,6 +39,7 @@ public class CobblemonExtrasPermissions {
         this.EMPTYBOX_PERMISSION = new CobblemonPermission("cobblemonextras.command.emptybox", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_EMPTYBOX_PERMISSION_LEVEL));
         this.POKESHOUT_ALL_PERMISSION = new CobblemonPermission("cobblemonextras.command.pokeshoutall", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_POKESHOUT_ALL_PERMISSION_LEVEL));
         this.ITEMSHOUT_PERMISSION = new CobblemonPermission("cobblemonextras.command.itemshout", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_ITEMSHOUT_PERMISSION_LEVEL));
+        this.POKEODDS_PERMISSION = new CobblemonPermission("cobblemonextras.command.pokeodds", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_POKEODDS_PERMISSION_LEVEL));
     }
 
     public PermissionLevel toPermLevel(int permLevel) {
