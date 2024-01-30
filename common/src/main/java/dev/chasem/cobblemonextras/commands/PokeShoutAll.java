@@ -51,7 +51,11 @@ public class PokeShoutAll {
                         toSend.append(("\n"));
                     }
                 } else {
+                    toSend.append("    " + (i+1) + ": ");
                     toSend.append(Text.literal("Empty").formatted(Formatting.RED));
+                    if (i != 5) {
+                        toSend.append(("\n"));
+                    }
                 }
             }
             ctx.getSource().getServer().getPlayerManager().getPlayerList().forEach(serverPlayer -> serverPlayer.sendMessage(toSend));

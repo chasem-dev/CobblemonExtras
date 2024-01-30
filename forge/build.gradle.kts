@@ -42,6 +42,7 @@ dependencies {
     }
     bundle(project(path = ":common", configuration = "transformProductionForge")) {
         isTransitive = false
+        exclude(group = "thedarkcolour")
     }
     testImplementation(project(":common", configuration = "namedElements"))
 
@@ -50,16 +51,11 @@ dependencies {
     }
 
 
-    listOf(
-        libs.stdlib,
-        libs.serializationCore,
-        libs.serializationJson,
-        libs.reflect,
-        libs.httpclient
-    ).forEach {
-        bundle(it)
-        forgeRuntimeLibrary(it)
+    bundle(libs.httpclient) {
+        exclude(group = "thedarkcolour")
+        exclude(group = "kotlin")
     }
+    forgeRuntimeLibrary(libs.httpclient)
 }
 
 tasks {
