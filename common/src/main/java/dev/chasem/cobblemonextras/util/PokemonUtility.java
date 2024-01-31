@@ -36,9 +36,14 @@ public class PokemonUtility {
 
         toSend.append(statsText);
 
+        // Add up Evs, round to 2 decimal places, multiply by 100 to get percent
+        double allEvs = pokemon.getEvs().getOrDefault(Stats.HP) + pokemon.getEvs().getOrDefault(Stats.ATTACK) + pokemon.getEvs().getOrDefault(Stats.DEFENCE) + pokemon.getEvs().getOrDefault(Stats.SPECIAL_ATTACK) + pokemon.getEvs().getOrDefault(Stats.SPECIAL_DEFENCE) + pokemon.getEvs().getOrDefault(Stats.SPEED);
+        double avg = (allEvs / (510.0));
+        double evPercent = (double) Math.round(avg * 10000) / 100;
+
         MutableText evsText = Text.literal(" [EVs]").formatted(Formatting.GOLD);
         MutableText evsHoverText = Text.literal("");
-        List<Text> evsHoverTextList = Text.literal("EVs").formatted(Formatting.GOLD).getWithStyle(Style.EMPTY.withUnderline(Boolean.TRUE));
+        List<Text> evsHoverTextList = Text.literal("EVs " + "(" + evPercent +"%) ").formatted(Formatting.GOLD).getWithStyle(Style.EMPTY.withUnderline(Boolean.TRUE));
         evsHoverTextList.add(Text.literal("\n"));
         evsHoverTextList.add(Text.literal("HP: ").formatted(Formatting.RED).append(Text.literal(String.valueOf(pokemon.getEvs().getOrDefault(Stats.HP))).formatted(Formatting.WHITE)));
         evsHoverTextList.add(Text.literal("\n"));
@@ -60,9 +65,14 @@ public class PokemonUtility {
         );
         evsList.forEach(toSend::append);
 
+        // Add up Ivs, take average, round to 2 decimal places, multiply by 100 to get percent
+        int allIvs = pokemon.getIvs().getOrDefault(Stats.HP) + pokemon.getIvs().getOrDefault(Stats.ATTACK) + pokemon.getIvs().getOrDefault(Stats.DEFENCE) + pokemon.getIvs().getOrDefault(Stats.SPECIAL_ATTACK) + pokemon.getIvs().getOrDefault(Stats.SPECIAL_DEFENCE) + pokemon.getIvs().getOrDefault(Stats.SPEED);
+        double ivAvg = (allIvs / (186.0));
+        double ivPercent = (double) Math.round(ivAvg * 10000) / 100;
+
         MutableText ivsText = Text.literal(" [IVs]").formatted(Formatting.LIGHT_PURPLE);
         MutableText ivsHoverText = Text.literal("");
-        List<Text> ivsHoverTextList = Text.literal("IVs").formatted(Formatting.LIGHT_PURPLE).getWithStyle(Style.EMPTY.withUnderline(Boolean.TRUE));
+        List<Text> ivsHoverTextList = Text.literal("IVs " + "(" + ivPercent + "%)").formatted(Formatting.LIGHT_PURPLE).getWithStyle(Style.EMPTY.withUnderline(Boolean.TRUE));
         ivsHoverTextList.add(Text.literal("\n"));
         ivsHoverTextList.add(Text.literal("HP: ").formatted(Formatting.RED).append(Text.literal(String.valueOf(pokemon.getIvs().getOrDefault(Stats.HP))).formatted(Formatting.WHITE)));
         ivsHoverTextList.add(Text.literal("\n"));

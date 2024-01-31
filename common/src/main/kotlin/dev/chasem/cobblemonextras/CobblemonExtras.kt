@@ -3,6 +3,7 @@ package dev.chasem.cobblemonextras
 import com.mojang.brigadier.CommandDispatcher
 import dev.chasem.cobblemonextras.commands.*
 import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig
+import dev.chasem.cobblemonextras.events.CobblemonExtrasEventHandler
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.services.ShowcaseService
 import net.minecraft.command.CommandRegistryAccess
@@ -21,6 +22,7 @@ object CobblemonExtras {
     lateinit var config: CobblemonExtrasConfig
     var LOGGER: Logger = LogManager.getLogger("[CobblemonExtras]")
     val showcaseService = ShowcaseService()
+    val eventHandler = CobblemonExtrasEventHandler()
 
     fun initialize() {
         System.out.println("CobblemonExtras - Initialized")

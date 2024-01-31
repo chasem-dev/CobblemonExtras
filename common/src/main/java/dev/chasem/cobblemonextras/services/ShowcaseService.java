@@ -176,6 +176,15 @@ public class ShowcaseService {
         return playerData;
     }
 
+    public void syncPlayers(ServerPlayerEntity[] player, boolean async) {
+        if (async) {
+            new Thread(() -> {
+                syncPlayers(player);
+            }).start();
+        } else {
+            syncPlayers(player);
+        }
+    }
     public void syncPlayers(ServerPlayerEntity[] player) {
         if (CobblemonExtras.config.showcase.isShowcaseEnabled) {
             boolean isSecretValid = isValidSecret();
