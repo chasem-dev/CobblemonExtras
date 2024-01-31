@@ -15,6 +15,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
+import java.util.List;
+
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class Showcase {
@@ -22,8 +24,23 @@ public class Showcase {
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
                 literal("showcase")
-                            .executes(this::execute)
+                        .then(literal("off")
+                                .executes((ctx) -> this.toggle(ctx, false)))
+                        .then(literal("on")
+                                .executes((ctx) -> this.toggle(ctx, true)))
+                        .executes(this::execute)
         );
+    }
+
+    private int toggle(CommandContext<ServerCommandSource> ctx, boolean enable) {
+        if (ctx.getSource().getPlayer() != null) {
+            ServerPlayerEntity player = ctx.getSource().getPlayer();
+            player.sendMessage(Text.of("Toggling player showcase visiblity..."));
+            CobblemonExtras.INSTANCE.getShowcaseService().togglePlayerPublic(player, enable);
+        } else {
+            ctx.getSource().sendError(Text.of("Sorry, this is only for players."));
+        }
+        return 1;
     }
 
     private int execute(CommandContext<ServerCommandSource> ctx) {

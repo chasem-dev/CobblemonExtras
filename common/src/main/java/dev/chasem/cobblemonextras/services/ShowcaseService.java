@@ -14,6 +14,10 @@ import dev.chasem.cobblemonextras.CobblemonExtras;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import com.google.gson.JsonObject;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
+import net.minecraft.util.Formatting;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -23,15 +27,13 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class ShowcaseService {
 //    public static String API_URL = "http://localhost:3000/api/sync";
 
-    public static String API_URL = "https://cobblemonextras.com/api/sync";
+    public static String API_BASE_URL = "https://cobblemonextras.com/api";
+//    public static String API_URL = "https://cobblemonextras.com/api/sync";
     public boolean hasFailed = false;
     public volatile Thread showcaseThread;
 
@@ -185,6 +187,28 @@ public class ShowcaseService {
             syncPlayers(player);
         }
     }
+
+    public void togglePlayerPublic(ServerPlayerEntity player, boolean showcaseEnabled) {
+
+        JsonObject json = new JsonObject();
+        json.addProperty("uuid", player.getUuid().toString());
+        json.addProperty("showcaseEnabled", showcaseEnabled);
+
+        boolean success = sendPlayerToggle(getClientSecret(), json);
+        if (success) {
+            if (showcaseEnabled) {
+                List<Text> onText = Text.literal("ON").getWithStyle(Style.EMPTY.withColor(Formatting.GREEN));
+                Text msg = Text.literal("Showcase is now ").append(Texts.join(onText, Text.of("")));
+                player.sendMessage(msg);
+            } else {
+                List<Text> onText = Text.literal("OFF").getWithStyle(Style.EMPTY.withColor(Formatting.RED));
+                Text msg = Text.literal("Showcase is now ").append(Texts.join(onText, Text.of("")));
+                player.sendMessage(msg);
+            }
+        } else {
+            player.sendMessage(Text.of("Failed to toggle showcase visibility."));
+        }
+    }
     public void syncPlayers(ServerPlayerEntity[] player) {
         if (CobblemonExtras.config.showcase.isShowcaseEnabled) {
             boolean isSecretValid = isValidSecret();
@@ -253,7 +277,7 @@ public class ShowcaseService {
     private void sendUpdateRequest(String apiToken, JsonObject requestBody) {
         HttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
         try {
-            HttpPost post = new HttpPost(API_URL);
+            HttpPost post = new HttpPost(API_BASE_URL + "/sync");
             post.setHeader("Accept-Encoding", "UTF-8");
             post.setHeader("Content-type", "application/json");
             post.setHeader("Authorization", Base64.getEncoder().encodeToString(apiToken.getBytes(StandardCharsets.UTF_8)));
@@ -279,6 +303,41 @@ public class ShowcaseService {
             } else {
                 CobblemonExtras.INSTANCE.getLogger().error("Failed to sync playerData to Showcase. Please report this to the CobblemonExtras Team.");
             }
+        }
+    }
+    private boolean sendPlayerToggle(String apiToken, JsonObject requestBody) {
+        HttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+        try {
+            HttpPost post = new HttpPost(API_BASE_URL + "/player");
+            post.setHeader("Accept-Encoding", "UTF-8");
+            post.setHeader("Content-type", "application/json");
+            post.setHeader("Authorization", Base64.getEncoder().encodeToString(apiToken.getBytes(StandardCharsets.UTF_8)));
+            StringEntity postingString = new StringEntity(requestBody.toString(), "UTF-8"); //convert to json
+            post.setEntity(postingString);
+            HttpResponse response = httpClient.execute(post);
+            if (response.getStatusLine().getStatusCode() == 403) {
+                CobblemonExtras.INSTANCE.getLogger().warn("Trouble syncing player public visibility");
+                return false;
+            } else if (response.getStatusLine().getStatusCode() == 404) {
+                CobblemonExtras.INSTANCE.getLogger().warn("Player attempted to turn off their showcase visibility.");
+                CobblemonExtras.INSTANCE.getLogger().warn("No server was found matching your configured clientSecret.");
+                return false;
+            } else if (response.getStatusLine().getStatusCode() != 200) {
+                CobblemonExtras.INSTANCE.getLogger().warn("Error when syncing player public visibility.");
+                CobblemonExtras.INSTANCE.getLogger().warn(response.getStatusLine().getStatusCode() + " - " + response.getStatusLine().getReasonPhrase());
+                return false;
+            } else {
+                hasFailed = false;
+                return true;
+            }
+        } catch (Exception ex) {
+            if (!hasFailed) {
+                ex.printStackTrace();
+                hasFailed = true;
+            } else {
+                CobblemonExtras.INSTANCE.getLogger().error("Failed to toggle player public visibility.");
+            }
+            return false;
         }
     }
 
