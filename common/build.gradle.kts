@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.reflect)
     implementation(libs.httpclient)
 //    implementation(libs.shadow)
-    implementation ("org.apache.httpcomponents:httpclient:4.5.13")
+//    implementation ("org.apache.httpcomponents:httpclient:4.5.13")
 
     modImplementation(libs.fabricLoader)
     modApi ("curse.maven:cobblemon-687131:4797468")

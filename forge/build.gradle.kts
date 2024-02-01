@@ -51,17 +51,18 @@ dependencies {
     }
 
 
-    bundle(libs.httpclient) {
-        exclude(group = "thedarkcolour")
-        exclude(group = "kotlin")
+    // bundle libs.httpclient and remap it to the mod's namespace
+    bundle("org.apache.httpcomponents:httpclient:4.5.13") {
+//        isTransitive = false
     }
-    forgeRuntimeLibrary(libs.httpclient)
+
 }
 
 tasks {
     shadowJar {
         exclude("architectury-common.accessWidener")
         relocate ("com.ibm.icu", "com.cobblemon.mod.relocations.ibm.icu")
+        relocate("org.apache.http", "dev.chasem.apache.http")
     }
 
     processResources {
