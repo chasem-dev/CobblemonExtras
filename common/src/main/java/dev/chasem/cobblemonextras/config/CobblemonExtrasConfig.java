@@ -38,5 +38,6 @@ public class CobblemonExtrasConfig {
 
         public int syncIntervalMinutes = 5;
         public boolean debug = false;
+        public boolean async = true;
     }
 }

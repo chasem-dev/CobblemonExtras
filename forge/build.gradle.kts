@@ -63,6 +63,7 @@ tasks {
         exclude("architectury-common.accessWidener")
         relocate ("com.ibm.icu", "com.cobblemon.mod.relocations.ibm.icu")
         relocate("org.apache.http", "dev.chasem.apache.http")
+        relocate("org.apache.commons", "dev.chasem.apache.commons")
     }
 
     processResources {

@@ -27,7 +27,7 @@ public class PokeOdds {
         dispatcher.register(literal("pokeodds")
                 .then(literal("setRate")
                         .requires(source -> CobblemonExtrasPermissions.checkPermission(source, CobblemonExtras.permissions.POKEODDS_PERMISSION))
-                        .then(argument("rate", FloatArgumentType.floatArg(0.0F, 100.0F))
+                        .then(argument("rate", FloatArgumentType.floatArg(1.0F, 10000.0F))
                                 .executes(ctx -> setRate(ctx, FloatArgumentType.getFloat(ctx, "rate")))))
                 .executes(this::execute));
     }

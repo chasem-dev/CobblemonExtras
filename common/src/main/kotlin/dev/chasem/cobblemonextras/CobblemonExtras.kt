@@ -1,5 +1,8 @@
 package dev.chasem.cobblemonextras
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.mojang.brigadier.CommandDispatcher
 import dev.chasem.cobblemonextras.commands.*
 import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig
@@ -9,11 +12,11 @@ import dev.chasem.cobblemonextras.services.ShowcaseService
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 object CobblemonExtras {
@@ -25,10 +28,15 @@ object CobblemonExtras {
     val eventHandler = CobblemonExtrasEventHandler()
 
     fun initialize() {
-        System.out.println("CobblemonExtras - Initialized")
+        getLogger().info("CobblemonExtras - Initialized")
         loadConfig() // must load before permissions so perms use default permission level.
         this.permissions = CobblemonExtrasPermissions()
         showcaseService.init()
+        if (config.showcase.async) {
+            getLogger().info("CobblemonExtras - Showcase Async Enabled")
+        } else {
+            getLogger().info("CobblemonExtras - Showcase Async Disabled")
+        }
     }
 
     fun onShutdown() {
@@ -50,7 +58,30 @@ object CobblemonExtras {
         if (configFile.exists()) {
             try {
                 val fileReader = FileReader(configFile)
-                config = CobblemonExtrasConfig.GSON.fromJson(fileReader, CobblemonExtrasConfig::class.java)
+//                var loadedConfig = CobblemonExtrasConfig.GSON.fromJson(fileReader, CobblemonExtrasConfig::class.java)
+
+
+                // Create a default config instance
+                val defaultConfig = CobblemonExtrasConfig()
+                val defaultConfigJson: String = CobblemonExtrasConfig.GSON.toJson(defaultConfig)
+
+
+                val fileConfigElement: JsonElement = JsonParser.parseReader(fileReader)
+
+
+                // Convert default config JSON string to JsonElement
+                val defaultConfigElement: JsonElement = JsonParser.parseString(defaultConfigJson)
+
+
+                // Merge default config with the file config
+                val mergedConfigElement: JsonElement = mergeConfigs(defaultConfigElement.getAsJsonObject(), fileConfigElement.getAsJsonObject())
+
+
+                // Deserialize the merged JsonElement back to CobblemonExtrasConfig
+                val finalConfig: CobblemonExtrasConfig = CobblemonExtrasConfig.GSON.fromJson(mergedConfigElement, CobblemonExtrasConfig::class.java)
+
+                this.config = finalConfig;
+
                 fileReader.close()
             } catch (e: Exception) {
                 System.err.println("[CobblemonExtras] Failed to load the config! Using default config as fallback")
@@ -61,6 +92,29 @@ object CobblemonExtras {
             config = CobblemonExtrasConfig()
         }
         saveConfig()
+    }
+
+    private fun mergeConfigs(defaultConfig: JsonObject, fileConfig: JsonObject): JsonElement {
+        // For every entry in the default config, check if it exists in the file config
+        getLogger().info("Checking for config merge.");
+        var merged = false;
+        for (key in defaultConfig.keySet()) {
+            if (!fileConfig.has(key)) {
+                // If the file config does not have the key, add it from the default config
+                fileConfig.add(key, defaultConfig.get(key))
+                getLogger().info("[CobblemonExtras] $key not found in file config, adding from default.");
+                merged = true;
+            } else {
+                // If it's a nested object, recursively merge it
+                if (defaultConfig.get(key).isJsonObject() && fileConfig.get(key).isJsonObject()) {
+                    mergeConfigs(defaultConfig.getAsJsonObject(key), fileConfig.getAsJsonObject(key))
+                }
+            }
+        }
+        if (merged) {
+            getLogger().info("[CobblemonExtras] Successfully merged config.");
+        }
+        return fileConfig
     }
 
     private fun saveConfig() {

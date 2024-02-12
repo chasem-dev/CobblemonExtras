@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import dev.chasem.cobblemonextras.CobblemonExtras;
+import dev.chasem.cobblemonextras.thread.SyncPlayersThread;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import com.google.gson.JsonObject;
@@ -26,6 +27,7 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
+import java.io.EOFException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -42,6 +44,7 @@ public class ShowcaseService {
             Thread tempThread = showcaseThread;
             showcaseThread = null;
             tempThread.interrupt();
+            CobblemonExtras.INSTANCE.getLogger().info("Showcase Thread Stopped");
         }
     }
 
@@ -58,7 +61,7 @@ public class ShowcaseService {
                 showcaseThread = new Thread(() -> {
                     while (showcaseThread == Thread.currentThread()) {
                         try {
-                            Thread.sleep(1000L * 60 * CobblemonExtras.config.showcase.syncIntervalMinutes);
+                            Thread.sleep(1000L * 60 * Math.max(CobblemonExtras.config.showcase.syncIntervalMinutes, 2));
                             // Get Minecraft Server instance
                             MinecraftServer server = Cobblemon.INSTANCE.getImplementation().server();
                             // Sync all players
@@ -96,6 +99,13 @@ public class ShowcaseService {
             // Form
             pokemonJson.addProperty("FormName", pokemon.getForm().getName());
 
+            pokemonJson.addProperty("Type1", pokemon.getPrimaryType().getDisplayName().getString());
+            if (pokemon.getSecondaryType() != null) {
+                pokemonJson.addProperty("Type2", pokemon.getSecondaryType().getDisplayName().getString());
+            } else {
+                pokemonJson.add("Type2", JsonNull.INSTANCE);
+            }
+
             // Movesets
             JsonObject moveJson = pokemonJson.getAsJsonObject("MoveSet");
             JsonElement moveSet0 = moveJson.get("MoveSet0");
@@ -132,12 +142,15 @@ public class ShowcaseService {
 
     public JsonObject getPlayerJson(ServerPlayerEntity player) {
         // Obtain cobblemon pc data
-        PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(player);
+        PlayerPartyStore party = null;
         PCStore pc = null;
         try {
+            party = Cobblemon.INSTANCE.getStorage().getParty(player);
             pc = Cobblemon.INSTANCE.getStorage().getPC(player.getUuid());
         } catch (NoPokemonStoreException e) {
 //            System.out.println("No PCStore found for player, skipping sync - " + player.getDisplayName().getString());
+        } catch (Exception exc) {
+            return null;
         }
         JsonObject playerData = new JsonObject();
         playerData.addProperty("uuid", player.getUuid().toString());
@@ -179,10 +192,9 @@ public class ShowcaseService {
     }
 
     public void syncPlayers(ServerPlayerEntity[] player, boolean async) {
-        if (async) {
-            new Thread(() -> {
-                syncPlayers(player);
-            }).start();
+        if (async && CobblemonExtras.config.showcase.async) {
+            SyncPlayersThread thread = new SyncPlayersThread(player);
+            thread.start();
         } else {
             syncPlayers(player);
         }

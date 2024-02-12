@@ -12,6 +12,7 @@ class CobblemonFabric : ModInitializer {
         CobblemonExtras.initialize();
         CommandRegistrationCallback.EVENT.register(CobblemonExtras::registerCommands)
         ServerLifecycleEvents.SERVER_STOPPING.register { CobblemonExtras.onShutdown() }
+        ServerLifecycleEvents.SERVER_STOPPED.register { CobblemonExtras.onShutdown() }
         ServerPlayConnectionEvents.JOIN.register { serverPlayNetworkHandler, _, _ ->
             CobblemonExtras.eventHandler.onPlayerLogin(serverPlayNetworkHandler.getPlayer())
         }
