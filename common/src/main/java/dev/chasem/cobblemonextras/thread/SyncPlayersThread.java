@@ -12,7 +12,7 @@ public class SyncPlayersThread extends Thread {
 
         @Override
         public void run() {
-            CobblemonExtras.INSTANCE.getShowcaseService().syncPlayers(players);
+            CobblemonExtras.INSTANCE.getShowcaseService().syncPlayers(players, CobblemonExtras.config.showcase.async);
             this.interrupt();
 
         }
