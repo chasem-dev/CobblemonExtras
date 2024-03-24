@@ -209,7 +209,8 @@ public class ShowcaseService {
                 if (CobblemonExtras.config.showcase.debug) {
                     System.out.println("Preparing to sync players async...");
                 }
-                Thread.sleep(2000);
+                // Confirming we're not halting the main thread
+                // Thread.sleep(2000);
                 if (CobblemonExtras.config.showcase.debug) {
                     System.out.println("Syncing players async...");
                 }
