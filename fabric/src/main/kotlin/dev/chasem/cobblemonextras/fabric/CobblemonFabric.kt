@@ -16,8 +16,5 @@ class CobblemonFabric : ModInitializer {
         ServerPlayConnectionEvents.JOIN.register { serverPlayNetworkHandler, _, _ ->
             CobblemonExtras.eventHandler.onPlayerLogin(serverPlayNetworkHandler.getPlayer())
         }
-        ServerPlayConnectionEvents.DISCONNECT.register { serverPlayNetworkHandler, _ ->
-            CobblemonExtras.eventHandler.onPlayerLogout(serverPlayNetworkHandler.getPlayer())
-        }
     }
 }

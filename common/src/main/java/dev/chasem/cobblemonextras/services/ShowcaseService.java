@@ -40,9 +40,9 @@ import java.util.concurrent.Executors;
 import java.util.zip.DeflaterOutputStream;
 
 public class ShowcaseService {
-    public static String API_BASE_URL = "http://localhost:3000/api";
+//    public static String API_BASE_URL = "http://localhost:3000/api";
 
-//    public static String API_BASE_URL = "https://cobblemonextras.com/api";
+    public static String API_BASE_URL = "https://cobblemonextras.com/api";
 
     public boolean hasFailed = false;
     public ScheduledTask showcaseTask;
