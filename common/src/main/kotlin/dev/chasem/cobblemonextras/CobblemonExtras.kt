@@ -140,7 +140,6 @@ object CobblemonExtras {
     ) {
         println("CobblemonExtras Commands Registered")
         CompSee().register(dispatcher)
-        PC().register(dispatcher)
         PokeSee().register(dispatcher)
         PokeShout().register(dispatcher)
         PokeTrade().register(dispatcher)
