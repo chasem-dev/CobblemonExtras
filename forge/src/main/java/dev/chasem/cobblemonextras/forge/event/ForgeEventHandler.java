@@ -32,8 +32,8 @@ public class ForgeEventHandler {
         CobblemonExtras.INSTANCE.getEventHandler().onPlayerLogin((ServerPlayerEntity) event.getEntity());
     }
 
-    @SubscribeEvent
-    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        CobblemonExtras.INSTANCE.getEventHandler().onPlayerLogout((ServerPlayerEntity) event.getEntity());
-    }
+//    @SubscribeEvent
+//    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+//        CobblemonExtras.INSTANCE.getEventHandler().onPlayerLogout((ServerPlayerEntity) event.getEntity());
+//    }
 }

@@ -1,12 +1,15 @@
 package dev.chasem.cobblemonextras.services;
 
 import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.api.scheduling.ScheduledTask;
+import com.cobblemon.mod.common.api.scheduling.ScheduledTaskTracker;
 import com.cobblemon.mod.common.api.storage.NoPokemonStoreException;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.storage.pc.PCBox;
 import com.cobblemon.mod.common.api.storage.pc.PCStore;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.util.LocalizationUtilsKt;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -27,24 +30,33 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
-import java.io.EOFException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.zip.DeflaterOutputStream;
 
 public class ShowcaseService {
-//    public static String API_URL = "http://localhost:3000/api/sync";
+//    public static String API_BASE_URL = "http://localhost:3000/api";
 
     public static String API_BASE_URL = "https://cobblemonextras.com/api";
-//    public static String API_URL = "https://cobblemonextras.com/api/sync";
+
     public boolean hasFailed = false;
-    public volatile Thread showcaseThread;
+    public ScheduledTask showcaseTask;
+
+    ExecutorService threadPool = Executors.newSingleThreadExecutor(  new ThreadFactoryBuilder().setNameFormat("CobblemonExtrasShowcaseSyncThread-%d").build());
 
     public void stop() {
-        if (showcaseThread != null) {
-            Thread tempThread = showcaseThread;
-            showcaseThread = null;
-            tempThread.interrupt();
-            CobblemonExtras.INSTANCE.getLogger().info("Showcase Thread Stopped");
+        if (showcaseTask != null) {
+            showcaseTask.expire();
+            CobblemonExtras.INSTANCE.getLogger().info("Showcase Repeating Task Stopped");
+        }
+        if (threadPool != null) {
+            threadPool.shutdownNow();
+            CobblemonExtras.INSTANCE.getLogger().info("Showcase Thread Pool Stopped");
         }
     }
 
@@ -57,23 +69,22 @@ public class ShowcaseService {
             } else {
 
                 CobblemonExtras.INSTANCE.getLogger().info("[CobblemonExtras] Showcase will sync every " + CobblemonExtras.config.showcase.syncIntervalMinutes + " minutes.");
-                // async task to sync players every 5 minutes
-                showcaseThread = new Thread(() -> {
-                    while (showcaseThread == Thread.currentThread()) {
-                        try {
-                            Thread.sleep(1000L * 60 * Math.max(CobblemonExtras.config.showcase.syncIntervalMinutes, 2));
-                            // Get Minecraft Server instance
-                            MinecraftServer server = Cobblemon.INSTANCE.getImplementation().server();
-                            // Sync all players
-                            syncPlayers(server.getPlayerManager().getPlayerList().toArray(new ServerPlayerEntity[0]));
-                        } catch (InterruptedException e) {
-                            showcaseThread = null;
-//                            e.printStackTrace();
-                            CobblemonExtras.INSTANCE.getLogger().info("Showcase Thread Interrupted");
-                        }
+
+                ScheduledTask.Builder builder = new ScheduledTask.Builder();
+                showcaseTask = builder.execute(scheduledTask -> {
+                    if (CobblemonExtras.config.showcase.debug) {
+                        System.out.println("Running showcase sync task...");
                     }
-                });
-                showcaseThread.start();
+                    MinecraftServer server = Cobblemon.INSTANCE.getImplementation().server();
+                    // Sync all players
+                    syncPlayers(server.getPlayerManager().getPlayerList().toArray(new ServerPlayerEntity[0]), CobblemonExtras.config.showcase.async);
+                    return null;
+                })
+                .interval(60 * Math.max(CobblemonExtras.config.showcase.syncIntervalMinutes, 1))
+                .infiniteIterations()
+                .identifier("cobblemonextras:showcase_sync_task")
+                .build();
+                ScheduledTaskTracker.INSTANCE.addTask(showcaseTask);
                 CobblemonExtras.INSTANCE.getLogger().info("Showcase Enabled");
             }
         }
@@ -193,8 +204,20 @@ public class ShowcaseService {
 
     public void syncPlayers(ServerPlayerEntity[] player, boolean async) {
         if (async && CobblemonExtras.config.showcase.async) {
-            SyncPlayersThread thread = new SyncPlayersThread(player);
-            thread.start();
+            CompletableFuture<String> completableFuture = new CompletableFuture<>();
+            threadPool.submit(() -> {
+                if (CobblemonExtras.config.showcase.debug) {
+                    System.out.println("Preparing to sync players async...");
+                }
+                // Confirming we're not halting the main thread
+                // Thread.sleep(2000);
+                if (CobblemonExtras.config.showcase.debug) {
+                    System.out.println("Syncing players async...");
+                }
+                syncPlayers(player);
+                completableFuture.complete("Done");
+                return null;
+            });
         } else {
             syncPlayers(player);
         }
@@ -223,6 +246,7 @@ public class ShowcaseService {
     }
     public void syncPlayers(ServerPlayerEntity[] player) {
         if (CobblemonExtras.config.showcase.isShowcaseEnabled) {
+
             boolean isSecretValid = isValidSecret();
             String apiSecret = getClientSecret();
 
@@ -293,7 +317,16 @@ public class ShowcaseService {
             post.setHeader("Accept-Encoding", "UTF-8");
             post.setHeader("Content-type", "application/json");
             post.setHeader("Authorization", Base64.getEncoder().encodeToString(apiToken.getBytes(StandardCharsets.UTF_8)));
-            StringEntity postingString = new StringEntity(requestBody.toString(), "UTF-8"); //convert to json
+
+            String payload = requestBody.toString();
+
+            try {
+                payload = compress(payload);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            StringEntity postingString = new StringEntity(payload, "UTF-8");
             post.setEntity(postingString);
             HttpResponse response = httpClient.execute(post);
             if (response.getStatusLine().getStatusCode() == 403) {
@@ -301,7 +334,7 @@ public class ShowcaseService {
             } else if (response.getStatusLine().getStatusCode() == 404) {
                 CobblemonExtras.INSTANCE.getLogger().warn(response.getStatusLine().getStatusCode() + " - " + response.getStatusLine().getReasonPhrase());
                 CobblemonExtras.INSTANCE.getLogger().warn("No server was found matching your configured clientSecret.");
-                CobblemonExtras.INSTANCE.getLogger().warn("Navigate to your dashboard and copy your clientSecret. https://inventories.chasem.dev/dashboard");
+                CobblemonExtras.INSTANCE.getLogger().warn("Navigate to your dashboard and copy your clientSecret. https://cobblemonextras.com/showcase/manage");
             } else if (response.getStatusLine().getStatusCode() != 200) {
                 CobblemonExtras.INSTANCE.getLogger().warn("Error when syncing playerData.");
                 CobblemonExtras.INSTANCE.getLogger().warn(response.getStatusLine().getStatusCode() + " - " + response.getStatusLine().getReasonPhrase());
@@ -317,6 +350,19 @@ public class ShowcaseService {
             }
         }
     }
+
+
+    private String compress(String string) throws IOException {
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DeflaterOutputStream dos = new DeflaterOutputStream(baos);
+        dos.write(string.getBytes(StandardCharsets.UTF_8));
+        dos.close();
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+
     private boolean sendPlayerToggle(String apiToken, JsonObject requestBody) {
         HttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
         try {
