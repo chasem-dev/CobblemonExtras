@@ -8,6 +8,7 @@ architectury {
 }
 
 repositories {
+    maven { url = uri("https://maven.impactdev.net/repository/development/") }
     maven {
         url = uri("https://cursemaven.com")
         content {
@@ -25,8 +26,9 @@ dependencies {
 //    implementation ("org.apache.httpcomponents:httpclient:4.5.13")
 
     modImplementation(libs.fabricLoader)
-    modApi ("curse.maven:cobblemon-687131:4797468")
-    // org.apache.http
+    // Fabric version
+    // https://www.curseforge.com/minecraft/mc-mods/cobblemon/files/4977486
+    modApi ("com.cobblemon:fabric:${rootProject.property("cobblemon_file")}")
 
     //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
 

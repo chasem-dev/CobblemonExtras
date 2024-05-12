@@ -21,6 +21,9 @@ sourceSets {
 repositories {
     mavenLocal()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
+
+    maven { url = uri("https://maven.impactdev.net/repository/development/") }
+
     maven {
         url = uri("https://cursemaven.com")
         content {
@@ -41,7 +44,9 @@ dependencies {
         isTransitive = false
     }
 
-    modImplementation ("curse.maven:cobblemon-687131:4797468") {
+    // Fabric version
+    // https://www.curseforge.com/minecraft/mc-mods/cobblemon/files/4977486
+    modImplementation ("com.cobblemon:fabric:${rootProject.property("cobblemon_file")}") {
         isTransitive = false;
     }
 

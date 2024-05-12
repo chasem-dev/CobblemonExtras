@@ -18,6 +18,7 @@ loom {
 repositories {
     maven(url = "https://thedarkcolour.github.io/KotlinForForge/")
     mavenLocal()
+    maven { url = uri("https://maven.impactdev.net/repository/development/") }
     maven {
         url = uri("https://cursemaven.com")
         content {
@@ -46,7 +47,9 @@ dependencies {
     }
     testImplementation(project(":common", configuration = "namedElements"))
 
-    modImplementation ("curse.maven:cobblemon-687131:4797451") {
+    // Forge version
+    // https://www.curseforge.com/minecraft/mc-mods/cobblemon/files/4797451
+    modImplementation ("com.cobblemon:fabric:${rootProject.property("cobblemon_file")}") {
         exclude(group = "net.minecraftforge")
     }
 

@@ -2,7 +2,7 @@ package dev.chasem.cobblemonextras.services;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask;
-import com.cobblemon.mod.common.api.scheduling.ScheduledTaskTracker;
+import com.cobblemon.mod.common.api.scheduling.ServerRealTimeTaskTracker;
 import com.cobblemon.mod.common.api.storage.NoPokemonStoreException;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.storage.pc.PCBox;
@@ -14,7 +14,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import dev.chasem.cobblemonextras.CobblemonExtras;
-import dev.chasem.cobblemonextras.thread.SyncPlayersThread;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import com.google.gson.JsonObject;
@@ -26,7 +25,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
@@ -84,7 +82,8 @@ public class ShowcaseService {
                 .infiniteIterations()
                 .identifier("cobblemonextras:showcase_sync_task")
                 .build();
-                ScheduledTaskTracker.INSTANCE.addTask(showcaseTask);
+                ServerRealTimeTaskTracker.INSTANCE.addTask(showcaseTask);
+
                 CobblemonExtras.INSTANCE.getLogger().info("Showcase Enabled");
             }
         }
