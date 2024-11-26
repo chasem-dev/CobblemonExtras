@@ -1,5 +1,6 @@
 package dev.chasem.cobblemonextras
 
+
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -9,9 +10,7 @@ import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig
 import dev.chasem.cobblemonextras.events.CobblemonExtrasEventHandler
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.services.ShowcaseService
-import net.minecraft.command.CommandRegistryAccess
-import net.minecraft.server.command.CommandManager
-import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.commands.CommandSourceStack
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
@@ -24,19 +23,14 @@ object CobblemonExtras {
     const val MODID = "cobblemonextras"
     lateinit var config: CobblemonExtrasConfig
     var LOGGER: Logger = LogManager.getLogger("[CobblemonExtras]")
-    val showcaseService = ShowcaseService()
+    lateinit var showcaseService: ShowcaseService
     val eventHandler = CobblemonExtrasEventHandler()
 
     fun initialize() {
         getLogger().info("CobblemonExtras - Initialized")
         loadConfig() // must load before permissions so perms use default permission level.
         this.permissions = CobblemonExtrasPermissions()
-        showcaseService.init()
-        if (config.showcase.async) {
-            getLogger().info("CobblemonExtras - Showcase Async Enabled")
-        } else {
-            getLogger().info("CobblemonExtras - Showcase Async Disabled")
-        }
+        this.showcaseService = ShowcaseService
     }
 
     fun onShutdown() {
@@ -133,20 +127,15 @@ object CobblemonExtras {
     }
 
 
-    fun registerCommands(
-        dispatcher: CommandDispatcher<ServerCommandSource>,
-        registry: CommandRegistryAccess,
-        selection: CommandManager.RegistrationEnvironment
-    ) {
-        println("CobblemonExtras Commands Registered")
+    fun registerCommands(dispatcher: CommandDispatcher<CommandSourceStack>) {
+        getLogger().info("CobblemonExtras registerCommands")
         CompSee().register(dispatcher)
         PokeSee().register(dispatcher)
         PokeShout().register(dispatcher)
         PokeTrade().register(dispatcher)
-
         Battle().register(dispatcher)
         PokeBattle().register(dispatcher)
-        PCDelete().register(dispatcher)
+        CompDelete().register(dispatcher)
         PokeIVs().register(dispatcher)
 
         PokeShoutAll().register(dispatcher)
@@ -155,6 +144,7 @@ object CobblemonExtras {
         ItemShout().register(dispatcher)
         PokeOdds().register(dispatcher)
         PokeKill().register(dispatcher)
+        PokeDelete().register(dispatcher)
     }
 
 }

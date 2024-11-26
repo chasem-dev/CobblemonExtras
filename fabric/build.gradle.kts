@@ -1,6 +1,7 @@
 plugins {
-    id("cobblemon.platform-conventions")
-    id("cobblemon.publish-conventions")
+    id("dev.architectury.loom")
+    id("architectury-plugin")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 architectury {
@@ -8,79 +9,68 @@ architectury {
     fabric()
 }
 
-val generatedResources = file("src/generated/resources")
+loom {
+    silentMojangMappingsLicense()
+    enableTransitiveAccessWideners.set(true)
+}
 
-sourceSets {
-    main {
-        resources {
-            srcDir(generatedResources)
-        }
+configurations.all {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     }
 }
 
-repositories {
-    mavenLocal()
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
-
-    maven { url = uri("https://maven.impactdev.net/repository/development/") }
-
-    maven {
-        url = uri("https://cursemaven.com")
-        content {
-            includeGroup("curse.maven")
-        }
-    }
-}
-
+val shadowCommon = configurations.create("shadowCommon")
 dependencies {
-    implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
 
-    "developmentFabric"(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    bundle(project(path = ":common", configuration = "transformProductionFabric")) {
-        isTransitive = false
-    }
+    modApi("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")
+    modRuntimeOnly("dev.architectury", "architectury-fabric", property("architectury_version").toString()) { isTransitive = false }
+    implementation(project(":common", configuration = "namedElements"))
+    "developmentFabric"(project(":common", configuration = "namedElements"))
 
-    // Fabric version
-    // https://www.curseforge.com/minecraft/mc-mods/cobblemon/files/4977486
-    modImplementation ("com.cobblemon:fabric:${rootProject.property("cobblemon_file")}") {
-        isTransitive = false;
-    }
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    shadowCommon("org.apache.httpcomponents:httpclient:4.5.13")
+    shadowCommon("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
-    modApi(libs.fabricLoader)
-    modApi(libs.fabricApi)
-    modApi(libs.fabricKotlin)
-    modApi(libs.fabricPermissionsApi)
-    listOf(
-        libs.stdlib,
-        libs.reflect,
-        libs.jetbrainsAnnotations,
-        libs.serializationCore,
-        libs.serializationJson,
-        libs.httpclient
-    ).forEach {
-        bundle(it)
-        runtimeOnly(it)
+
+    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}") { isTransitive = false }
+    shadowCommon(project(":common", configuration = "transformProductionFabric"))
+}
+
+tasks.processResources {
+    inputs.property("version", project.version)
+
+    filesMatching("fabric.mod.json") {
+        expand(project.properties)
     }
 }
 
 tasks {
-    // The AW file is needed in :fabric project resources when the game is run.
-    val copyAccessWidener by registering(Copy::class) {
-        from(loom.accessWidenerPath)
-        into(generatedResources)
+
+    jar {
+        archiveBaseName.set("CobblemonExtras-${project.name}")
+        archiveClassifier.set("dev-slim")
     }
 
-    shadowJar {}
-
-    processResources {
-        inputs.property("version", rootProject.version)
-
-        filesMatching("fabric.mod.json") {
-            expand("version" to rootProject.version)
-        }
+    shadowJar {
+        exclude("architectury.common.json", "com/**/*")
+        archiveClassifier.set("dev-shadow")
+        archiveBaseName.set("CobblemonExtras-${project.name}")
+        configurations = listOf(shadowCommon)
     }
+
+    remapJar {
+        dependsOn(shadowJar)
+        inputFile.set(shadowJar.flatMap { it.archiveFile })
+        archiveBaseName.set("CobblemonExtras-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
 }
+
+

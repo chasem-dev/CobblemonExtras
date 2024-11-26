@@ -1,0 +1,33 @@
+modLoader="kotlinforforge" #mandatory
+loaderVersion="[5.3,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+
+license = "MIT"
+
+[[mods]]
+modId = "cobblemonextras"
+version = "1.0.0"
+displayName = "Cobblemon Extras Forge Sidemod"
+description = '''
+
+'''
+
+[[dependencies.cobblemonextras]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.21]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemonextras]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemonextras]]
+modId = "cobblemon"
+mandatory = true
+versionRange = "[1.6.0,)"
+ordering = "NONE"
+side = "BOTH"

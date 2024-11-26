@@ -8,9 +8,11 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 
 class CobblemonFabric : ModInitializer {
     override fun onInitialize() {
-        System.out.println("Fabric Mod init")
+        CobblemonExtras.getLogger().info("Fabric Mod init")
         CobblemonExtras.initialize();
-        CommandRegistrationCallback.EVENT.register(CobblemonExtras::registerCommands)
+        CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
+            CobblemonExtras.registerCommands(dispatcher)
+        }
         ServerLifecycleEvents.SERVER_STOPPING.register { CobblemonExtras.onShutdown() }
         ServerLifecycleEvents.SERVER_STOPPED.register { CobblemonExtras.onShutdown() }
         ServerPlayConnectionEvents.JOIN.register { serverPlayNetworkHandler, _, _ ->
