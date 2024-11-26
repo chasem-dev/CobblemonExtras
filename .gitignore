@@ -1,35 +1,19 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
+build/
+*.ipr
+run/
+*.iws
+out/
+*.iml
+.gradle/
+output/
+bin/
+libs/
+
 .classpath
 .project
-/.architectury-transformer/
-common/src/main/resources/assets/cobblemon/showdown
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
-
-# gradle
-build
-.gradle
-
-# other
-eclipse
-run
-
-# Files from Forge MDK
-forge*changelog.txt
-/showdown/
-/logs/
-.vscode/launch.json
+.idea/
+classes/
+.metadata
 .vscode
-common/src/main/resources/assets/cobblemon/showdown
-
-# Generated files
-*/generated/resources/*
-/fabric/src/generated/resources/cobblemon-common.accesswidener
+.settings
+*.launch

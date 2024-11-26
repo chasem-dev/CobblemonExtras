@@ -1,12 +1,28 @@
 plugins {
-    base
-    id("cobblemon.root-conventions")
+    id("java")
+    id("java-library")
+    kotlin("jvm") version("2.0.0")
+
+    id("dev.architectury.loom") version("1.7-SNAPSHOT") apply false
+    id("architectury-plugin") version("3.4-SNAPSHOT") apply false
 }
 
-group = "dev.chasem.cobblemonextras"
-version = "${project.property("mod_version")}+${project.property("mc_version")}"
+allprojects {
+    apply(plugin = "java")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
 
-val isSnapshot = project.property("snapshot")?.equals("true") ?: false
-if (isSnapshot) {
-    version = "$version-SNAPSHOT"
+    version = project.properties["mod_version"]!!
+    group = project.properties["maven_group"]!!
+
+    repositories {
+        mavenCentral()
+        maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        maven("https://maven.impactdev.net/repository/development/")
+        maven("https://maven.neoforged.net/releases")
+        maven("https://thedarkcolour.github.io/KotlinForForge/")
+    }
+
+    java {
+        withSourcesJar()
+    }
 }

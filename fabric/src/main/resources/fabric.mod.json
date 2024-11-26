@@ -24,8 +24,9 @@
     "fabricloader": ">=0.14.21",
     "fabric": ">=0.89.0",
     "fabric-api": "*",
-    "minecraft": ">=1.20.0",
-    "java": ">=17"
+    "minecraft": ">=1.21.0",
+    "java": ">=21",
+    "cobblemon": ">=1.6.0"
   },
   "custom": {
     "modmenu": {
