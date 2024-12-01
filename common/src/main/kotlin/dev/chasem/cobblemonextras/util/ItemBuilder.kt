@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.Unit
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.ItemLore
 import java.util.*
 import java.util.stream.Collectors
@@ -36,6 +37,16 @@ class ItemBuilder {
         itemLore = ItemLore(list)
         stack!!.set(DataComponents.LORE, itemLore)
         return this
+    }
+
+    fun setCustomData(data: CustomData): ItemBuilder {
+        stack!!.set(DataComponents.CUSTOM_DATA, data)
+        return this
+    }
+
+    fun setAmount(amount: Int): ItemBuilder {
+        this.stack!!.setCount(amount);
+        return this;
     }
 
     fun hideAdditional(): ItemBuilder {

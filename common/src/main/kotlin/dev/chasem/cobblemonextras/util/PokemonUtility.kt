@@ -17,11 +17,15 @@ object PokemonUtility {
     fun getHoverText(toSend: MutableComponent, pokemon: Pokemon): Component {
         val statsHoverText = Component.literal("").withStyle(Style.EMPTY)
 
-        statsHoverText.append(pokemon.getDisplayName().withStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GREEN).withUnderlined(true)))
         if (pokemon.shiny) {
             statsHoverText.append(Component.literal(" ★").withStyle(ChatFormatting.GOLD))
         }
+        statsHoverText.append(pokemon.species.translatedName.copy().withStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GREEN).withUnderlined(true)))
         statsHoverText.append(Component.literal("\n"))
+        if (pokemon.nickname != null) {
+            statsHoverText.append(Component.literal("Nickname: ").withStyle(ChatFormatting.GRAY).append(Component.literal(pokemon.nickname!!.string).withStyle(ChatFormatting.WHITE)))
+            statsHoverText.append(Component.literal("\n"))
+        }
         statsHoverText.append(Component.literal("Level: ").withStyle(ChatFormatting.AQUA).append(Component.literal(pokemon.level.toString()).withStyle(ChatFormatting.WHITE)))
         statsHoverText.append(Component.literal("\n"))
         statsHoverText.append(Component.literal("Nature: ").withStyle(ChatFormatting.YELLOW).append(lang(pokemon.nature.displayName.replace("cobblemon.", "")).withStyle(ChatFormatting.WHITE)))
@@ -126,6 +130,11 @@ object PokemonUtility {
                 .hideAdditional()
                 .addLore(arrayOf<Component>(Component.literal(pokemon.caughtBall.item().defaultInstance.displayName.string).setStyle(Style.EMPTY.withItalic(true).withColor(ChatFormatting.DARK_GRAY)),
                         Component.literal("Level: ").withStyle(ChatFormatting.AQUA).append(Component.literal(pokemon.level.toString()).withStyle(ChatFormatting.WHITE)),
+
+                        Component.literal("Nickname: ").withStyle(ChatFormatting.DARK_GREEN).append(Component.literal(
+                                pokemon.nickname?.string ?: "No nickname"
+                        ).withStyle(ChatFormatting.WHITE)),
+
                         Component.literal("Nature: ").withStyle(ChatFormatting.YELLOW).append(lang(pokemon.nature.displayName.replace("cobblemon.", "")).withStyle(ChatFormatting.WHITE)),
                         Component.literal("Ability: ").withStyle(ChatFormatting.GOLD).append(lang(pokemon.ability.displayName.replace("cobblemon.", "")).withStyle(ChatFormatting.WHITE)),
                         Component.literal("IVs: ").withStyle(ChatFormatting.LIGHT_PURPLE),
@@ -151,7 +160,7 @@ object PokemonUtility {
                         Component.literal("Form: ").withStyle(ChatFormatting.GOLD).append(pokemon.form.name)
                 ))
                 .setCustomName(
-                        if (pokemon.shiny) pokemon.getDisplayName().withStyle(ChatFormatting.GRAY).append(Component.literal(" ★").withStyle(ChatFormatting.GOLD)) else pokemon.getDisplayName().withStyle(ChatFormatting.GRAY)
+                        if (pokemon.shiny) pokemon.species.translatedName.copy().withStyle(ChatFormatting.GRAY).append(Component.literal(" ★").withStyle(ChatFormatting.GOLD)) else pokemon.species.translatedName.copy().withStyle(ChatFormatting.GRAY)
                 )
                 .build()
         return itemstack

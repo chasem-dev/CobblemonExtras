@@ -1,6 +1,7 @@
 package dev.chasem.cobblemonextras
 
 
+import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -8,6 +9,7 @@ import com.mojang.brigadier.CommandDispatcher
 import dev.chasem.cobblemonextras.commands.*
 import dev.chasem.cobblemonextras.config.CobblemonExtrasConfig
 import dev.chasem.cobblemonextras.events.CobblemonExtrasEventHandler
+import dev.chasem.cobblemonextras.events.PokeTokensInteractionHandler
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.services.ShowcaseService
 import net.minecraft.commands.CommandSourceStack
@@ -31,6 +33,7 @@ object CobblemonExtras {
         loadConfig() // must load before permissions so perms use default permission level.
         this.permissions = CobblemonExtrasPermissions()
         this.showcaseService = ShowcaseService
+        PokeTokensInteractionHandler()
     }
 
     fun onShutdown() {
@@ -145,6 +148,8 @@ object CobblemonExtras {
         PokeOdds().register(dispatcher)
         PokeKill().register(dispatcher)
         PokeDelete().register(dispatcher)
+        GivePokeToken().register(dispatcher)
+        BattleSpectate().register(dispatcher)
     }
 
 }

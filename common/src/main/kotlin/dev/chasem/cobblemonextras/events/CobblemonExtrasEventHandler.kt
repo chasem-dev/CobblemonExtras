@@ -27,7 +27,6 @@ class CobblemonExtrasEventHandler {
     }
 
     fun onPlayerLogout(player: ServerPlayer) {
-//        System.out.println(player.getName().getString() + " has logged out!");
         if (CobblemonExtras.config.showcase.isShowcaseEnabled) {
             showcaseService.syncPlayers(List.of(player))
         }
