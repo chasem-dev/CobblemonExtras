@@ -63,6 +63,9 @@ class CobblemonExtrasConfig {
 
         @SerializedName("command.givepoketoken")
         var COMMAND_GIVE_POKETOKEN_PERMISSION: Int = 3
+
+        @SerializedName("command.giveshinyball")
+        var COMMAND_GIVE_SHINYBALL_PERMISSION: Int = 3
     }
 
     inner class ShowcaseConfig {

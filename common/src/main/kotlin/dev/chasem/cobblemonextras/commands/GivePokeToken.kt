@@ -1,12 +1,17 @@
 package dev.chasem.cobblemonextras.commands
 
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Nature
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import dev.chasem.cobblemonextras.CobblemonExtras
+import dev.chasem.cobblemonextras.game.poketokens.MaxEVPokeToken
+import dev.chasem.cobblemonextras.game.poketokens.MaxIVPokeToken
+import dev.chasem.cobblemonextras.game.poketokens.NaturePokeToken
+import dev.chasem.cobblemonextras.game.poketokens.ShinyPokeToken
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.util.ItemBuilder
 import net.minecraft.ChatFormatting
@@ -35,10 +40,16 @@ class GivePokeToken {
                                                 .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) }))
                                 .then(literal("maxivs")
                                         .then(Commands.argument("amount", IntegerArgumentType.integer(1, 64))
-                                                .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) }))
+                                                .then(Commands.argument("stats", StringArgumentType.greedyString())
+                                                        .suggests { ctx, builder ->
+                                                            SharedSuggestionProvider.suggest(
+                                                                    listOf("HP", "Atk", "Def", "SpAtk", "SpDef", "Spd"),
+                                                                    builder)
+                                                        }
+                                                        .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })
+                                        ))
                                 .then(literal("maxevs")
                                         .then(Commands.argument("amount", IntegerArgumentType.integer(1, 64))
-
                                                 .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) }))
                                 .then(literal("nature")
                                         .then(Commands.argument("nature", StringArgumentType.word())
@@ -47,8 +58,8 @@ class GivePokeToken {
                                                             Natures.all().map { it.displayName },
                                                             builder)
                                                 }
-                                        .then(Commands.argument("amount", IntegerArgumentType.integer(1, 64))
-                                                .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })))
+                                                .then(Commands.argument("amount", IntegerArgumentType.integer(1, 64))
+                                                        .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })))
                         )
         )
     }
@@ -65,64 +76,45 @@ class GivePokeToken {
         val tokenType = ctx.input.split(" ")[2]
         val amount = IntegerArgumentType.getInteger(ctx, "amount")
 
-        val itemBuilder = generateItem(tokenType, amount)
+        var itemStack: ItemStack? = null
 
         if (tokenType == "nature") {
-
-            itemBuilder.setCustomData(CustomData.of(
-                    CompoundTag().apply {
-                        putString("PokeTokenType", "nature")
-                        putString("nature", StringArgumentType.getString(ctx, "nature"))
-                    }
-            ))
-
             val natureText = StringArgumentType.getString(ctx, "nature")
             val nature = Natures.getNature(natureText.replace("cobblemon.nature.", ""))
-            val natureCapitalized = nature!!.displayName.replace("cobblemon.nature.", "").capitalize()
-            itemBuilder.addLore(arrayOf(Component.literal(""), Component.literal("Nature: ").withStyle(ChatFormatting.GREEN)
-                    .append(Component.literal(natureCapitalized).withStyle(ChatFormatting.WHITE))))
+            if (nature == null) {
+                ctx.source.sendFailure(Component.literal("Nature not found."))
+                return 0
+            }
+            itemStack = NaturePokeToken(nature).generateItem(amount).build()
+        } else if (tokenType == "maxivs") {
+            val statsArg = StringArgumentType.getString(ctx, "stats");
+            // Create a list of stats from Stats.PERMANENT
+            val stats = statsArg.split(" ").map {
+                when (it.lowercase()) {
+                    "hp" -> Stats.HP
+                    "atk" -> Stats.ATTACK
+                    "def" -> Stats.DEFENCE
+                    "spatk" -> Stats.SPECIAL_ATTACK
+                    "spdef" -> Stats.SPECIAL_DEFENCE
+                    "spd" -> Stats.SPEED
+                    else -> throw IllegalArgumentException("Invalid stat: $it")
+                }
+            }
+
+            itemStack = MaxIVPokeToken(stats.toSet()).generateItem(amount).build()
+        } else if (tokenType == "maxevs") {
+            itemStack = MaxEVPokeToken(Stats.ATTACK).generateItem(amount).build()
+        } else if (tokenType == "shiny") {
+            itemStack = ShinyPokeToken().generateItem(amount).build()
         }
 
-        val itemStack = itemBuilder.build()
+        if (itemStack == null) {
+            ctx.source.sendFailure(Component.literal("Failed to create PokeToken."))
+            return 0
+        }
+
         targettedPlayer.inventory.add(itemStack)
 
         return 1;
     }
-
-    private fun generateItem(tokenType: String, amount: Int) : ItemBuilder {
-
-        val itemName = when(tokenType) {
-            "shinytoken" -> "Shiny Token"
-            "maxivs" -> "Max IVs Token"
-            "maxevs" -> "Max EVs Token"
-            "nature" -> "Nature Token"
-            else -> "Token"
-        }
-
-        val itemDescription = when(tokenType) {
-            "shiny" -> "Right click on a pokemon to make it shiny."
-            "maxivs" -> "Right click on a pokemon to give it max IVs."
-            "maxevs" -> "Right click on a pokemon to give it max EVs."
-            "nature" -> "Right click on a pokemon to change its nature to the specified nature."
-            else -> "Right click on a pokemon to use this token."
-        }
-
-        return ItemBuilder(Items.PAPER)
-                .setCustomData(CustomData.of(
-                        CompoundTag().apply {
-                            putString("PokeTokenType", tokenType)
-                        }
-                ))
-                .setCustomName(Component.literal(itemName).withStyle(Style.EMPTY.withItalic(false).withColor(ChatFormatting.YELLOW)))
-                .addLore(
-                         arrayOf(
-                                 Component.literal("One time use").withStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
-                                 Component.literal(""),
-                                 Component.literal(itemDescription).withStyle(ChatFormatting.GRAY),
-                         )
-                )
-                .setAmount(amount)
-    }
-
-
 }

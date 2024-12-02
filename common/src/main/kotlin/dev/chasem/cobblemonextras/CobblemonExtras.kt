@@ -1,7 +1,8 @@
 package dev.chasem.cobblemonextras
 
 
-import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -13,6 +14,7 @@ import dev.chasem.cobblemonextras.events.PokeTokensInteractionHandler
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.services.ShowcaseService
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.world.entity.EntityEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
@@ -34,6 +36,7 @@ object CobblemonExtras {
         this.permissions = CobblemonExtrasPermissions()
         this.showcaseService = ShowcaseService
         PokeTokensInteractionHandler()
+        CobblemonEvents.POKEMON_CAPTURED.subscribe { event -> eventHandler.onPokemonCapture(event) }
     }
 
     fun onShutdown() {
@@ -129,7 +132,6 @@ object CobblemonExtras {
         }
     }
 
-
     fun registerCommands(dispatcher: CommandDispatcher<CommandSourceStack>) {
         getLogger().info("CobblemonExtras registerCommands")
         CompSee().register(dispatcher)
@@ -150,6 +152,7 @@ object CobblemonExtras {
         PokeDelete().register(dispatcher)
         GivePokeToken().register(dispatcher)
         BattleSpectate().register(dispatcher)
+        GiveShinyBall().register(dispatcher)
     }
 
 }

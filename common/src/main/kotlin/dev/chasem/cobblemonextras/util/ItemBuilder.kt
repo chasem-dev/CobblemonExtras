@@ -1,6 +1,7 @@
 package dev.chasem.cobblemonextras.util
 
 import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Unit
 import net.minecraft.world.item.Item
@@ -40,7 +41,15 @@ class ItemBuilder {
     }
 
     fun setCustomData(data: CustomData): ItemBuilder {
-        stack!!.set(DataComponents.CUSTOM_DATA, data)
+        // If the stack has custom data, get it and append the new data to it, otherwise create a new custom data with the new data
+        val customData = if (stack!!.has(DataComponents.CUSTOM_DATA)) stack!!.get(DataComponents.CUSTOM_DATA) else CustomData.of(CompoundTag())
+
+        val newTag = customData!!.copyTag()
+        val tag = data.copyTag()
+
+        tag.allKeys.forEach { key -> newTag.put(key, tag.get(key)) }
+
+        stack!!.set(DataComponents.CUSTOM_DATA, CustomData.of(newTag))
         return this
     }
 

@@ -11,6 +11,12 @@ description = '''
 
 '''
 
+#[[mixins]]
+#config = "mixins.cobblemon-neoforge.json"
+[[mixins]]
+config = "mixins.cobblemonextras-common.json"
+
+
 [[dependencies.cobblemonextras]]
 modId = "minecraft"
 mandatory = true
