@@ -66,6 +66,9 @@ class CobblemonExtrasConfig {
 
         @SerializedName("command.giveshinyball")
         var COMMAND_GIVE_SHINYBALL_PERMISSION: Int = 3
+
+        @SerializedName("command.battlespectate")
+        var COMMAND_BATTLESPECTATE_PERMISSION: Int = 2
     }
 
     inner class ShowcaseConfig {

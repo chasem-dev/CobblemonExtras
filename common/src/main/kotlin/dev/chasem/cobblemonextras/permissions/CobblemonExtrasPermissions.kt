@@ -26,6 +26,7 @@ class CobblemonExtrasPermissions {
     val POKEKILL_PERMISSION: CobblemonPermission
     val GIVE_POKETOKEN_PERMISSION: CobblemonPermission
     val GIVE_SHINYBALL_PERMISSION: CobblemonPermission
+    val BATTLE_SPECTATE_PERMISSION: CobblemonPermission
 
     init {
         this.COMPSEE_PERMISSION = CobblemonPermission("cobblemonextras.command.compsee", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_COMPSEE_PERMISSION_LEVEL))
@@ -47,6 +48,7 @@ class CobblemonExtrasPermissions {
         this.POKEKILL_PERMISSION = CobblemonPermission("cobblemonextras.command.pokekill", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_POKEKILL_PERMISSION_LEVEL))
         this.GIVE_POKETOKEN_PERMISSION = CobblemonPermission("cobblemonextras.command.givepoketoken", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_GIVE_POKETOKEN_PERMISSION))
         this.GIVE_SHINYBALL_PERMISSION = CobblemonPermission("cobblemonextras.command.giveshinyball", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_GIVE_SHINYBALL_PERMISSION))
+        this.BATTLE_SPECTATE_PERMISSION = CobblemonPermission("cobblemonextras.command.battlespectate", toPermLevel(CobblemonExtras.config.permissionLevels.COMMAND_BATTLESPECTATE_PERMISSION))
     }
 
     fun toPermLevel(permLevel: Int): PermissionLevel {

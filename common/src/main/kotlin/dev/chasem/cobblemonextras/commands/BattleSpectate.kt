@@ -31,7 +31,7 @@ class BattleSpectate {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
                 literal("battlespectate")
-                        .requires { src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.BATTLE_PERMISSION) }
+                        .requires { src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.BATTLE_SPECTATE_PERMISSION) }
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })
         )
