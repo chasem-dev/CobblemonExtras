@@ -2,31 +2,23 @@ package dev.chasem.cobblemonextras.commands
 
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.pokemon.Nature
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import dev.chasem.cobblemonextras.CobblemonExtras
-import dev.chasem.cobblemonextras.game.poketokens.MaxEVPokeToken
 import dev.chasem.cobblemonextras.game.poketokens.MaxIVPokeToken
 import dev.chasem.cobblemonextras.game.poketokens.NaturePokeToken
 import dev.chasem.cobblemonextras.game.poketokens.ShinyPokeToken
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
-import dev.chasem.cobblemonextras.util.ItemBuilder
-import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.commands.arguments.EntityArgument
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Style
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.world.item.component.CustomData
 
 class GivePokeToken {
 
@@ -48,9 +40,9 @@ class GivePokeToken {
                                                         }
                                                         .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })
                                         ))
-                                .then(literal("maxevs")
-                                        .then(Commands.argument("amount", IntegerArgumentType.integer(1, 64))
-                                                .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) }))
+//                                .then(literal("maxevs")
+//                                        .then(Commands.argument("amount", IntegerArgumentType.integer(1, 64))
+//                                                .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) }))
                                 .then(literal("nature")
                                         .then(Commands.argument("nature", StringArgumentType.word())
                                                 .suggests { ctx, builder ->
@@ -102,11 +94,12 @@ class GivePokeToken {
             }
 
             itemStack = MaxIVPokeToken(stats.toSet()).generateItem(amount).build()
-        } else if (tokenType == "maxevs") {
-            itemStack = MaxEVPokeToken(Stats.ATTACK).generateItem(amount).build()
-        } else if (tokenType == "shiny") {
+        }  else if (tokenType == "shiny") {
             itemStack = ShinyPokeToken().generateItem(amount).build()
         }
+//        else if (tokenType == "maxevs") {
+//            itemStack = MaxEVPokeToken(Stats.ATTACK).generateItem(amount).build()
+//        }
 
         if (itemStack == null) {
             ctx.source.sendFailure(Component.literal("Failed to create PokeToken."))

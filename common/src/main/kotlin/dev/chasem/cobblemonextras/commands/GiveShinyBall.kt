@@ -1,18 +1,11 @@
 package dev.chasem.cobblemonextras.commands
 
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.pokemon.Natures
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.pokemon.Nature
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import dev.chasem.cobblemonextras.CobblemonExtras
-import dev.chasem.cobblemonextras.game.poketokens.MaxEVPokeToken
-import dev.chasem.cobblemonextras.game.poketokens.MaxIVPokeToken
-import dev.chasem.cobblemonextras.game.poketokens.NaturePokeToken
-import dev.chasem.cobblemonextras.game.poketokens.ShinyPokeToken
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.util.ItemBuilder
 import net.minecraft.ChatFormatting
@@ -26,7 +19,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 
 class GiveShinyBall {
@@ -46,15 +38,28 @@ class GiveShinyBall {
                             .suggests { context, builder ->
                                 SharedSuggestionProvider.suggest(arrayOf("1", "32", "64"), builder)
                             }
-                            .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })
+                            .then(Commands.argument("ballType", StringArgumentType.word())
+                                .suggests { context, builder ->
+                                    SharedSuggestionProvider.suggest(
+                                        arrayOf("poke", "great", "ultra", "master"),
+                                        builder
+                                    )
+                                }
+                                .executes { ctx: CommandContext<CommandSourceStack> ->
+                                    this.execute(
+                                        ctx,
+                                        StringArgumentType.getString(ctx, "ballType")
+                                    )
+                                }
+                            )
+                            .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx, "poke") }
+                        )
                 )
         )
     }
 
 
-
-
-    private fun execute(ctx: CommandContext<CommandSourceStack>): Int {
+    private fun execute(ctx: CommandContext<CommandSourceStack>, ballType: String = "poke"): Int {
         val targettedPlayer: ServerPlayer = EntityArgument.getPlayer(ctx, "player")
 
         if (targettedPlayer == null) {
@@ -63,19 +68,29 @@ class GiveShinyBall {
         }
         val amount = IntegerArgumentType.getInteger(ctx, "amount")
 
-        targettedPlayer.inventory.add(createShinyBall(amount))
+        targettedPlayer.inventory.add(createShinyBall(amount, ballType))
 
         return 1;
     }
 
     companion object {
         @JvmStatic
-        fun createShinyBall(amount: Int): ItemStack {
-            return ItemBuilder(CobblemonItems.POKE_BALL)
+        fun createShinyBall(amount: Int, ballType: String = "poke"): ItemStack {
+
+            val item = when(ballType) {
+                "poke" -> CobblemonItems.POKE_BALL
+                "great" -> CobblemonItems.GREAT_BALL
+                "ultra" -> CobblemonItems.ULTRA_BALL
+                "master" -> CobblemonItems.MASTER_BALL
+                else -> CobblemonItems.POKE_BALL
+            }
+
+            return ItemBuilder(item)
                 .setAmount(amount)
                 .setCustomData(
                     CustomData.of(CompoundTag().apply {
                         this.putString("CobblemonExtrasBallType", "shiny")
+                        this.putString("ShinyBallBallType", ballType)
                     })
                 )
                 .setCustomName(

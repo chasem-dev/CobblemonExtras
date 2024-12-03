@@ -1,28 +1,21 @@
 package dev.chasem.cobblemonextras.events
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import dev.chasem.cobblemonextras.CobblemonExtras
 import dev.chasem.cobblemonextras.CobblemonExtras.getLogger
 import dev.chasem.cobblemonextras.CobblemonExtras.showcaseService
-import net.minecraft.server.level.ServerPlayer
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
-import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
-import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
-import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
-import com.cobblemon.mod.common.item.PokeBallItem
-import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.minecraft.client.multiplayer.chat.report.ReportEnvironment.Server
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.phys.BlockHitResult
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 import kotlin.math.cos
 
 class CobblemonExtrasEventHandler {
@@ -62,26 +55,23 @@ class CobblemonExtrasEventHandler {
 
     fun onUseItem(player: ServerPlayer, world: Level, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = player.getItemInHand(hand)
-        getLogger().info("onUseItem()")
-        if (itemStack.item == CobblemonItems.POKE_BALL) {
+        if (itemStack.item == CobblemonItems.POKE_BALL || itemStack.item == CobblemonItems.GREAT_BALL || itemStack.item == CobblemonItems.ULTRA_BALL || itemStack.item == CobblemonItems.MASTER_BALL) {
             if (itemStack.has(DataComponents.CUSTOM_DATA)) {
-                getLogger().info("PokeBall has custom data!")
                 val customData = itemStack.get(DataComponents.CUSTOM_DATA)
                 val tag = customData?.copyTag() ?: CompoundTag()
                 if (tag.contains("CobblemonExtrasBallType")) {
                     val ballType = tag.getString("CobblemonExtrasBallType")
                     if (ballType == "shiny") {
-                        getLogger().info("Shiny Ball used!")
-                        val pokeBall = CobblemonItems.POKE_BALL.pokeBall
-//                        private fun pokeBallItem(pokeBall: PokeBall): PokeBallItem {
-//                            val item = CobblemonItems.create(pokeBall.name.path, PokeBallItem(pokeBall))
-//                            pokeBall.item = item
-//                            CobblemonItems.pokeBalls.add(item)
-//                            return item
-//                        }
 
+                        val itemBallType = tag.getString("ShinyBallBallType")
+                        val pokeBall = when(itemBallType) {
+                            "poke" -> CobblemonItems.POKE_BALL.pokeBall
+                            "great" -> CobblemonItems.GREAT_BALL.pokeBall
+                            "ultra" -> CobblemonItems.ULTRA_BALL.pokeBall
+                            "master" -> CobblemonItems.MASTER_BALL.pokeBall
+                            else -> CobblemonItems.POKE_BALL.pokeBall
+                        }
                         val pokeBallEntity = EmptyPokeBallEntity(pokeBall, player.level(), player)
-
 
 
                         pokeBallEntity.apply {
@@ -96,13 +86,6 @@ class CobblemonExtrasEventHandler {
                             owner = player
 
                         }
-
-                        // subscribe to the pokeBallEntity.captureFuture and set the pokemon to shiny
-//                        pokeBallEntity.captureFuture.thenAccept { res ->
-//                            getLogger().info("Shiny Ball Capture Effect! ${res}")
-//                                getLogger().info("Shiny Ball Capture Effect!")
-//                                pokemon.shiny = true
-//                        }
                         pokeBallEntity.setGlowingTag(true)
                         pokeBallEntity.addTag("shinyBall")
                         world.addFreshEntity(pokeBallEntity)
