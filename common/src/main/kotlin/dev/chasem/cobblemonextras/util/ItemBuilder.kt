@@ -1,10 +1,12 @@
 package dev.chasem.cobblemonextras.util
 
 import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Unit
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.ItemLore
 import java.util.*
 import java.util.stream.Collectors
@@ -36,6 +38,24 @@ class ItemBuilder {
         itemLore = ItemLore(list)
         stack!!.set(DataComponents.LORE, itemLore)
         return this
+    }
+
+    fun setCustomData(data: CustomData): ItemBuilder {
+        // If the stack has custom data, get it and append the new data to it, otherwise create a new custom data with the new data
+        val customData = if (stack!!.has(DataComponents.CUSTOM_DATA)) stack!!.get(DataComponents.CUSTOM_DATA) else CustomData.of(CompoundTag())
+
+        val newTag = customData!!.copyTag()
+        val tag = data.copyTag()
+
+        tag.allKeys.forEach { key -> newTag.put(key, tag.get(key)) }
+
+        stack!!.set(DataComponents.CUSTOM_DATA, CustomData.of(newTag))
+        return this
+    }
+
+    fun setAmount(amount: Int): ItemBuilder {
+        this.stack!!.setCount(amount);
+        return this;
     }
 
     fun hideAdditional(): ItemBuilder {

@@ -60,6 +60,15 @@ class CobblemonExtrasConfig {
 
         @SerializedName("command.pokekill")
         var COMMAND_POKEKILL_PERMISSION_LEVEL: Int = 3
+
+        @SerializedName("command.givepoketoken")
+        var COMMAND_GIVE_POKETOKEN_PERMISSION: Int = 3
+
+        @SerializedName("command.giveshinyball")
+        var COMMAND_GIVE_SHINYBALL_PERMISSION: Int = 3
+
+        @SerializedName("command.battlespectate")
+        var COMMAND_BATTLESPECTATE_PERMISSION: Int = 2
     }
 
     inner class ShowcaseConfig {

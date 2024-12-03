@@ -25,7 +25,6 @@ class ItemShout {
         if (ctx.source.player != null) {
             val player: ServerPlayer = ctx.source.player!!
             val heldItem: ItemStack = player.mainHandItem
-//            val itemContent: HoverEvent.ItemStackContent = ItemStackContent(heldItem)
             var itemHover = HoverEvent.ItemStackInfo(heldItem)
             val toSend = Component.literal("[").withStyle(ChatFormatting.YELLOW)
                     .append(Component.literal("ItemShout").withStyle(ChatFormatting.GREEN))
@@ -34,12 +33,6 @@ class ItemShout {
 
             val itemName = heldItem.displayName
             val hoverAbleName = itemName.copy().withStyle(itemName.style.withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_ITEM, itemHover)).withUnderlined(true))
-
-//            val hoverAbleName = Texts.join(itemName.getWithStyle(itemName.getStyle()
-//                    .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_ITEM, itemContent))
-//                    .withUnderline(true)),
-//                    Component.literal("")
-//            )
             toSend.append(hoverAbleName)
             ctx.source.server.playerList.players.forEach { serverPlayer -> serverPlayer.sendSystemMessage(toSend) }
         } else {
