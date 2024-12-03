@@ -44,11 +44,9 @@ class CobblemonExtrasEventHandler {
 
 
     fun onPokemonCapture(event: PokemonCapturedEvent) {
-        getLogger().info("Pokemon Captured Event!")
         val pokemon = event.pokemon
         val pokeBallEntity = event.pokeBallEntity
         if (pokeBallEntity.tags.contains("shinyBall")) {
-            getLogger().info("Shiny Ball Capture Effect!")
             pokemon.shiny = true
         }
     }

@@ -36,38 +36,6 @@ class PokeTokensInteractionHandler {
             val pokeToken = PokeToken.fromCustomData(customData)
             pokeToken.onUseItem(event, entity)
             player.mainHandItem.shrink(1)
-
-//            when (type) {
-//                "shiny" -> {
-//                    entity.pokemon.shiny = true
-//                    player.playSound(
-//                            SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F
-//                    )
-//                    player.sendSystemMessage(Component.literal("Your Pokemon is now shiny!").withStyle(ChatFormatting.YELLOW))
-//                }
-//                "maxivs" -> {
-//                    heldItem.shrink(1)
-//                    Stats.PERMANENT.forEach {
-//                        entity.pokemon.setIV(it, 31)
-//                    }
-//                    player.playSound(
-//                            SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F
-//                    )
-//                    player.sendSystemMessage(Component.literal("Your ${entity.pokemon.species.translatedName.string} has received Maximum IVs").withStyle(ChatFormatting.YELLOW))
-//                }
-//                "maxevs" -> {
-//                    heldItem.shrink(1)
-//                    Stats.PERMANENT.forEach {
-//                        entity.pokemon.setEV(it, 252)
-//                    }
-//                    player.playSound(
-//                            SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F
-//                    )
-//                    player.sendSystemMessage(Component.literal("Your ${entity.pokemon.species.translatedName.string} has received Maximum EVs").withStyle(ChatFormatting.YELLOW))
-//                }
-//                "nature" -> {
-//                }
-//            }
         }
 
     }
