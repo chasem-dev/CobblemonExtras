@@ -28,7 +28,7 @@ class Battle {
                         .requires { src -> CobblemonExtrasPermissions.checkPermission(src, CobblemonExtras.permissions.BATTLE_PERMISSION) }
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes { ctx: CommandContext<CommandSourceStack> -> this.execute(ctx) })
-                        .then(Commands.literal("deny")
+                        .then(literal("deny")
                                 .then(Commands.argument("player", EntityArgument.player())
                                         .executes { ctx: CommandContext<CommandSourceStack> -> this.deny(ctx) }))
         )

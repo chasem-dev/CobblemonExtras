@@ -86,6 +86,7 @@ class CobblemonExtrasEventHandler {
                         }
                         pokeBallEntity.setGlowingTag(true)
                         pokeBallEntity.addTag("shinyBall")
+                        pokeBallEntity.aspects += "shinyBall"
                         world.addFreshEntity(pokeBallEntity)
                         itemStack.shrink(1)
                     }

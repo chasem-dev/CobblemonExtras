@@ -12,7 +12,7 @@
     "sources": "https://github.com/Xwaffle1/CobblemonExtras",
     "issues": "https://github.com/Xwaffle1/CobblemonExtras-/issues"
   },
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
     "main": [
       "dev.chasem.cobblemonextras.fabric.CobblemonFabric"

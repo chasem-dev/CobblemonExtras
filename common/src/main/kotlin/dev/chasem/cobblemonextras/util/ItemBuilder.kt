@@ -7,6 +7,7 @@ import net.minecraft.util.Unit
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.item.component.CustomModelData
 import net.minecraft.world.item.component.ItemLore
 import java.util.*
 import java.util.stream.Collectors
@@ -39,6 +40,12 @@ class ItemBuilder {
         stack!!.set(DataComponents.LORE, itemLore)
         return this
     }
+
+    fun setCustomModel(customModelVal: Int): ItemBuilder {
+        this.stack!!.set(DataComponents.CUSTOM_MODEL_DATA, CustomModelData(customModelVal))
+        return this
+    }
+
 
     fun setCustomData(data: CustomData): ItemBuilder {
         // If the stack has custom data, get it and append the new data to it, otherwise create a new custom data with the new data

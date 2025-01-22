@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import dev.chasem.cobblemonextras.CobblemonExtras
+import dev.chasem.cobblemonextras.config.CustomModelConstants
 import dev.chasem.cobblemonextras.permissions.CobblemonExtrasPermissions
 import dev.chasem.cobblemonextras.util.ItemBuilder
 import net.minecraft.ChatFormatting
@@ -96,6 +97,7 @@ class GiveShinyBall {
                 .setCustomName(
                     Component.literal("Shiny Ball").withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD).withBold(true))
                 )
+                .setCustomModel(CustomModelConstants.SHINY_BALL)
                 .addLore(
                     arrayOf(
                         Component.literal("A unique ball that forces the captured")
