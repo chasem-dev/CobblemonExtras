@@ -81,7 +81,10 @@ class CompSeeMenu : MenuProvider {
 
         }
         val box = pcStore?.boxes?.get(boxNumber);
-        for (i in 0..MAX_BOX_COUNT - 1) {
+        for (i in 0..<container.containerSize) {
+            if (i >= 30) {
+                break;
+            }
             val pokemon = box?.get(i);
             val row = floor(i.toDouble() / 6.0)
             val index = i % 6

@@ -8,6 +8,9 @@ class CobblemonExtrasConfig {
     @SerializedName("permissionlevels")
     var permissionLevels: PermissionLevels = PermissionLevels()
     var showcase: ShowcaseConfig = ShowcaseConfig()
+    @SerializedName("customModels")
+    var customModels: CustomModelsConfig = CustomModelsConfig()
+
 
     inner class PermissionLevels {
         @SerializedName("command.poketrade")
@@ -78,6 +81,16 @@ class CobblemonExtrasConfig {
         var syncIntervalMinutes: Int = 5
         var debug: Boolean = false
         var async: Boolean = true
+    }
+
+    inner class CustomModelsConfig {
+        var SHINY_TOKEN = 100;
+        var NATURE_TOKEN = 101;
+        var IV_TOKEN = 102;
+        var EV_TOKEN = 103;
+
+        // PokeBall Item
+        var SHINY_BALL = 100;
     }
 
     companion object {

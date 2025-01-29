@@ -1,10 +1,9 @@
 package dev.chasem.cobblemonextras.game.poketokens
 
-import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.cobblemon.mod.common.pokemon.Nature
-import dev.chasem.cobblemonextras.config.CustomModelConstants
+import dev.chasem.cobblemonextras.CobblemonExtras
 import dev.chasem.cobblemonextras.util.ItemBuilder
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents
@@ -35,7 +34,7 @@ class NaturePokeToken (val nature: Nature) : PokeToken(PokeTokenType.NATURE) {
                 }
         )).addLore(arrayOf(Component.literal(""), Component.literal("Nature: ").withStyle(ChatFormatting.GREEN)
                 .append(Component.literal(natureCapitalized).withStyle(ChatFormatting.WHITE))))
-            .setCustomModel(CustomModelConstants.NATURE_TOKEN)
+            .setCustomModel(CobblemonExtras.config.customModels.NATURE_TOKEN)
     }
 
     override fun onUseItem(event: ServerPlayerEvent.RightClickEntity, entity: PokemonEntity) {

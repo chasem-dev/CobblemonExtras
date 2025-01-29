@@ -33,6 +33,15 @@ object CobblemonExtras {
     fun initialize() {
         getLogger().info("CobblemonExtras - Initialized")
         loadConfig() // must load before permissions so perms use default permission level.
+
+        getLogger().info("CobblemonExtras - Custom Model Data")
+        getLogger().info("IV Token: ${config.customModels.IV_TOKEN}")
+        getLogger().info("EV Token: ${config.customModels.EV_TOKEN}")
+        getLogger().info("Nature Token: ${config.customModels.NATURE_TOKEN}")
+        getLogger().info("Shiny Token: ${config.customModels.SHINY_TOKEN}")
+        getLogger().info("Shiny Ball: ${config.customModels.SHINY_BALL}")
+
+
         this.permissions = CobblemonExtrasPermissions()
         this.showcaseService = ShowcaseService
         PokeTokensInteractionHandler()

@@ -25,7 +25,6 @@ public abstract class EmptyPokeBallEntityMixin extends ThrowableItemProjectile {
     public void cobblemonExtras$onHitBlock(BlockHitResult hitResult, CallbackInfo ci) {
         final EmptyPokeBallEntity pokeBallEntity = (EmptyPokeBallEntity) (Object) this;
         boolean isShinyBall = pokeBallEntity.getTags().contains("shinyBall") || pokeBallEntity.getAspects().contains("shinyBall");
-        CobblemonExtras.INSTANCE.getLogger().info("Pokeball hit block, isShiny: " + isShinyBall + ", captureState: " + pokeBallEntity.getCaptureState());
         if (isShinyBall && pokeBallEntity.getCaptureState() == EmptyPokeBallEntity.CaptureState.NOT) {
 
             if (!level().isClientSide) {
@@ -52,7 +51,6 @@ public abstract class EmptyPokeBallEntityMixin extends ThrowableItemProjectile {
     public void cobblemonExtras$drop(CallbackInfo ci) {
         final EmptyPokeBallEntity pokeBallEntity = (EmptyPokeBallEntity) (Object) this;
         boolean isShinyBall = pokeBallEntity.getTags().contains("shinyBall") || pokeBallEntity.getAspects().contains("shinyBall");
-        CobblemonExtras.INSTANCE.getLogger().info("Pokeball drop(), isShiny: " + isShinyBall + ", captureState: " + pokeBallEntity.getCaptureState());
         if (isShinyBall && pokeBallEntity.getOwner() instanceof ServerPlayer) {
             ServerPlayer player = (ServerPlayer) pokeBallEntity.getOwner();
             if (!player.isCreative()) {

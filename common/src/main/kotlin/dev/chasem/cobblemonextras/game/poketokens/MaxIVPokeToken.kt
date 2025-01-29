@@ -3,7 +3,7 @@ package dev.chasem.cobblemonextras.game.poketokens
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
-import dev.chasem.cobblemonextras.config.CustomModelConstants
+import dev.chasem.cobblemonextras.CobblemonExtras
 import dev.chasem.cobblemonextras.util.ItemBuilder
 import net.minecraft.ChatFormatting
 import net.minecraft.core.component.DataComponents
@@ -46,7 +46,7 @@ class MaxIVPokeToken (private val stats: Set<Stat>) : PokeToken(PokeTokenType.MA
 
                 )
         )
-        .setCustomModel(CustomModelConstants.IV_TOKEN)
+        .setCustomModel(CobblemonExtras.config.customModels.IV_TOKEN)
     }
 
     override fun onUseItem(event: ServerPlayerEvent.RightClickEntity, entity: PokemonEntity) {

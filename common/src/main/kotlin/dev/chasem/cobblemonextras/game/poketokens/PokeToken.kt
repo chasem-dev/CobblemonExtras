@@ -61,9 +61,14 @@ abstract class PokeToken(val tokenType: PokeTokenType) {
             val natureString = tag.getString("nature") ?: ""
             val ivStatsString = tag.getString("stats") ?: ""
 //            val statsSplit = stats.joinToString(",") { it.displayName.string };
-            val ivStats = ivStatsString.split(",").map { statString -> Stats.PERMANENT.find {
-                it.displayName.string == statString
-            }!! }.toSet()
+            var ivStats = emptySet<Stat>()
+            if (ivStatsString.isNotEmpty()) {
+                ivStats = ivStatsString.split(",").map { statString ->
+                    Stats.PERMANENT.find {
+                        it.displayName.string == statString
+                    }!!
+                }.toSet()
+            }
             val evStatsString = tag.getString("stat") ?: ""
             val evStat = Stats.getStat(evStatsString)
             val nature = Natures.all().find { it.displayName == natureString }
