@@ -1,6 +1,6 @@
 # CobblemonExtras
 
-A sidemod for Cobblemon, adding support for additional server side commands.
+A side mod for Cobblemon, adding support for additional server side commands.
 
 ## Download
 
