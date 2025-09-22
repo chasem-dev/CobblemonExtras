@@ -154,7 +154,10 @@ object CobblemonExtras {
 
         PokeShoutAll().register(dispatcher)
         EmptyBox().register(dispatcher)
-        Showcase().register(dispatcher)
+
+        if (config.showcase.isShowcaseEnabled) {
+            Showcase().register(dispatcher)
+        }
         ItemShout().register(dispatcher)
         PokeOdds().register(dispatcher)
         PokeKill().register(dispatcher)
