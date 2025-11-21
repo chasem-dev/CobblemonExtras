@@ -34,6 +34,6 @@ side = "BOTH"
 [[dependencies.cobblemonextras]]
 modId = "cobblemon"
 mandatory = true
-versionRange = "[1.6.0,)"
+versionRange = "[1.7.0,)"
 ordering = "NONE"
 side = "BOTH"
