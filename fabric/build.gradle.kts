@@ -33,10 +33,7 @@ dependencies {
     "developmentFabric"(project(":common", configuration = "namedElements"))
 
     implementation("org.apache.httpcomponents:httpclient:4.5.13")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     shadowCommon("org.apache.httpcomponents:httpclient:4.5.13")
-    shadowCommon("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-
 
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}") { isTransitive = false }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
