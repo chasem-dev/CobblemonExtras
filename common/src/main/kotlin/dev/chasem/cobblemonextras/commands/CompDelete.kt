@@ -3,7 +3,7 @@ package dev.chasem.cobblemonextras.commands
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.storage
 import com.cobblemon.mod.common.api.storage.NoPokemonStoreException
-import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPokemonPacket
+import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPacket
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
@@ -47,7 +47,7 @@ class CompDelete {
                         ctx.source.sendSystemMessage(Component.literal("No Pokemon found in slot.").withStyle(ChatFormatting.RED))
                     }
                     box[slotNum] = null
-                    SetPCBoxPokemonPacket(box).sendToPlayer(otherPlayer)
+                    SetPCBoxPacket(box).sendToPlayer(otherPlayer)
                 }
             } catch (e: NoPokemonStoreException) {
                 throw RuntimeException(e)
