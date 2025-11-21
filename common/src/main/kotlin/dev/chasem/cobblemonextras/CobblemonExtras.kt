@@ -165,6 +165,7 @@ object CobblemonExtras {
         GivePokeToken().register(dispatcher)
         BattleSpectate().register(dispatcher)
         GiveShinyBall().register(dispatcher)
+        PlayerGames().register(dispatcher)
     }
 
 }
