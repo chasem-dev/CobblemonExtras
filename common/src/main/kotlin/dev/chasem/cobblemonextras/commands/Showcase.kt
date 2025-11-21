@@ -27,6 +27,12 @@ class Showcase {
     private fun toggle(ctx: CommandContext<CommandSourceStack>, enable: Boolean): Int {
         if (ctx.getSource().getPlayer() != null) {
             val player: ServerPlayer = ctx.getSource().getPlayer()!!
+
+            if(!CobblemonExtras.config.showcase.isShowcaseEnabled) {
+                player.sendSystemMessage(Component.literal("Showcase is disabled."));
+                return 1
+            }
+
             player.sendSystemMessage(Component.literal("Toggling player showcase visiblity..."))
             CobblemonExtras.showcaseService.togglePlayerPublic(player, enable)
         } else {
